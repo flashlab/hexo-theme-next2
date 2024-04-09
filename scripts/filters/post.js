@@ -10,7 +10,7 @@ hexo.extend.filter.register('after_post_render', data => {
   const theme = hexo.theme.config;
   if (!theme.exturl && !theme.lazyload) return;
   if (theme.lazyload) {
-    data.content = data.content.replace(/(<img[^>]*)\ssrc=/ig, '$1 data-src=');
+    data.content = data.content.replace(/(<img[^>]*) src="\/\./ig, '$1 data-src="https://pic.313159.xyz').replace(/(<img[^>]*)\ssrc=/ig, '$1 data-src=');
   }
   if (theme.exturl) {
     const siteHost = parse(config.url).hostname || config.url;
