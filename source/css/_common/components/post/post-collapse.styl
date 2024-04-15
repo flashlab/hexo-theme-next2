@@ -57,7 +57,7 @@
     position: relative;
     transition: border $transition-ease;
 
-    &::before {
+    &::before, img {
       background: $grey;
       border: 1px solid white;
       left: -6px;
@@ -65,6 +65,13 @@
       top: $font-size-smallest;
       transition: background $transition-ease;
       round-icon(6px);
+    }
+
+    img {
+      height: 16px;
+      width: 16px;
+      left: -11px;
+      top: 0.4em;
     }
 
     &:hover {

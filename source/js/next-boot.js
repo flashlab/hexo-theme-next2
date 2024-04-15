@@ -45,7 +45,7 @@ NexT.boot.refresh = function() {
   CONFIG.mediumzoom && window.mediumZoom('.post-body :not(a) > img, .post-body > img', {
     background: 'var(--content-bg-color)'
   });
-  CONFIG.lazyload && window.lozad('.post-body img').observe();
+  CONFIG.lazyload && window.lozad('[data-src]').observe();
   CONFIG.pangu && window.pangu.spacingPage();
 
   CONFIG.exturl && NexT.utils.registerExtURL();
