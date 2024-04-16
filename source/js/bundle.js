@@ -844,3 +844,19 @@ Pace.options.restartOnPushState = false;
 document.addEventListener('pjax:send', () => {
   Pace.restart();
 });
+
+/* custom */
+document.querySelector('.with-love').addEventListener('click', () => {
+  const values = 'title: 我是标题\nauthor: Flora\ntags: [生活]\ncategories: [原创, 喵的日记]\ndate: ' + new Date().toLocaleString(
+    'en-CA', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      hour12: false,
+      minute: '2-digit',
+      second: '2-digit'
+    }
+  ).replace(/,/g, '') + '\n---'
+  open(`https://github.com/flashlab/flashlab.github.io/new/main/source/_posts?filename=miao.md&value=${encodeURIComponent(values)}`)
+})
