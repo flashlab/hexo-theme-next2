@@ -1,7 +1,7 @@
 <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
   {%- if theme.avatar.url %}
     <img class="site-author-image" itemprop="image" alt="{{ author }}"
-      src="{{ url_for(theme.avatar.url) }}">
+      {% if theme.lazyload %}data-{% endif %}src="{{ url_for(theme.avatar.url) }}">
   {%- endif %}
   <p class="site-author-name" itemprop="name">{{ author }}</p>
   <div class="site-description" itemprop="description">{{ description }}</div>
@@ -75,7 +75,8 @@
 
 {%- if theme.creative_commons.license and theme.creative_commons.sidebar %}
   <div class="cc-license animated" itemprop="license">
-    {%- set ccImage = '<img src="' + theme.vendors.creative_commons.url + '" alt="Creative Commons">' %}
+    {%- set ccImageTag = '<img data-src="' if theme.lazyload else '<img src="' %}
+    {%- set ccImage = ccImageTag + theme.vendors.creative_commons.url + '" alt="Creative Commons">' %}
     {{ next_url(ccURL, ccImage, {class: 'cc-opacity'}) }}
   </div>
 {%- endif %}
