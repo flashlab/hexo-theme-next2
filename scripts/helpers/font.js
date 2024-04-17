@@ -21,5 +21,5 @@ module.exports = function() {
   fontFamilies = [...new Set(fontFamilies)].join('%7C');
 
   // Merge extra parameters to the final processed font string
-  return fontFamilies ? `<link rel="stylesheet" href="${fontHost}/css?family=${fontFamilies}&display=swap&subset=latin,latin-ext">` : '';
+  return fontFamilies ? `<link rel="stylesheet" href="${fontHost}/css?family=${fontFamilies}&display=swap&subset=latin,latin-ext" media="print" onload="this.media='all'">` : '';
 };

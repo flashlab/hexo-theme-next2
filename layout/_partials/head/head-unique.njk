@@ -17,6 +17,8 @@
 {# https://hexo.io/docs/variables.html #}
 {{ next_data('page', next_config_unique()) }}
 
+{%- if theme.calendar.enable %}
 {{ next_data('calendar',
   theme.calendar if page.type === 'schedule' else '')
 }}
+{%- endif %}

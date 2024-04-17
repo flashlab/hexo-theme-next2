@@ -15,6 +15,7 @@ NexT.motion.integrator = {
     return this;
   },
   bootstrap: function() {
+    if (!window.anime) return;
     if (!CONFIG.motion.async) this.queue = [this.queue];
     this.queue.forEach(sequence => {
       const timeline = window.anime.timeline({

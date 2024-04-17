@@ -1,6 +1,6 @@
 {%- include 'vendors.njk' -%}
 {%- if theme.bundle %}
-  {{- next_js('bundle.js') }}
+  {{- next_js('bundle.js', { defer: true }) }}
 {%- else %}
   {{- next_js('comments.js') }}
 

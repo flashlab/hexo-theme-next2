@@ -19,7 +19,8 @@ hexo.extend.helper.register('next_inject', function(point) {
 
 hexo.extend.helper.register('next_js', function(file, {
   pjax = false,
-  module = false
+  module = false,
+  defer = false
 } = {}) {
   const { next_version } = this;
   const { internal, custom_cdn_url } = this.theme.vendors;
@@ -32,18 +33,17 @@ hexo.extend.helper.register('next_js', function(file, {
     custom  : custom_cdn_url
   });
   const src = links[internal] || links.local;
-  return `<script ${pjax ? 'data-pjax ' : ''}${module ? 'type="module" ' : ''}src="${src}"></script>`;
+  return `<script ${pjax ? 'data-pjax ' : ''}${module ? 'type="module" ' : ''}${defer ? 'defer ' : ''}src="${src}"></script>`;
 });
 
-hexo.extend.helper.register('next_vendors', function(name) {
+hexo.extend.helper.register('next_vendors', function(name, prop='') {
   const { url, integrity } = this.theme.vendors[name];
   const type = url.endsWith('css') ? 'css' : 'js';
+  if (integrity) prop += ` integrity="${integrity}" crossorigin="anonymous"`
   if (type === 'css') {
-    if (integrity) return `<link rel="stylesheet" href="${url}" integrity="${integrity}" crossorigin="anonymous">`;
-    return `<link rel="stylesheet" href="${url}">`;
+    return `<link rel="stylesheet" href="${url}"${prop}>`;
   }
-  if (integrity) return `<script src="${url}" integrity="${integrity}" crossorigin="anonymous"></script>`;
-  return `<script src="${url}"></script>`;
+  return `<script src="${url}"${prop}></script>`;
 });
 
 hexo.extend.helper.register('next_data', function(name, ...data) {
