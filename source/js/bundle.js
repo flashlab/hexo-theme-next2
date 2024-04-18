@@ -101,7 +101,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
     })
   );
 
-  if (document.readyState === 'loading') {
+  if (document.readyState != 'complete') {
     document.addEventListener('readystatechange', onPageLoaded, { once: true });
   } else {
     onPageLoaded();
