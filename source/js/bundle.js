@@ -941,17 +941,48 @@ document.addEventListener('page:loaded', () => {
 });
 
 /* custom */
-document.querySelector('.with-love').addEventListener('click', () => {
-  const values = 'title: 我是标题\nauthor: Flora\ntags: [生活]\ncategories: [原创, 喵的日记]\ndate: ' + new Date().toLocaleString(
-    'en-CA', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      hour12: false,
-      minute: '2-digit',
-      second: '2-digit'
+window.typing = function typing(el, tl, str_length, index, text_pos) {
+  let contents = '';
+  let row = Math.max(0, index - 0);//index -7
+  while (row < index) {
+    contents += tl[row++] + '\r\n';
+  }
+  //document.forms[0].elements[0].value = contents + tl[index].substring(0,text_pos) + "_";
+  el.value = contents + tl[index].substring(0, text_pos);
+  if (text_pos++ == str_length) {
+    text_pos = 0;
+    index++;
+    if (index != tl.length) {
+      str_length = tl[index].length;
+      setTimeout(() => {
+        typing(el, tl, str_length, index, text_pos);
+      }, 1500);
     }
-  ).replace(/,/g, '') + '\n---'
-  open(`https://github.com/flashlab/flashlab.github.io/new/main/source/_posts?filename=miao.md&value=${encodeURIComponent(values)}`)
+  }
+  else
+    setTimeout(() => {
+      typing(el, tl, str_length, index, text_pos);
+    }, 50); // speed
+};
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('.with-love').addEventListener('click', () => {
+    const values = 'title: 我是标题\nauthor: Flora\ntags: [生活]\ncategories: [原创, 喵的日记]\ndate: ' + new Date().toLocaleString(
+      'en-CA', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        hour12: false,
+        minute: '2-digit',
+        second: '2-digit'
+      }
+    ).replace(/,/g, '') + '\n---'
+    open(`https://github.com/flashlab/flashlab.github.io/new/main/source/_posts?filename=miao.md&value=${encodeURIComponent(values)}`)
+  });
+  const tar = document.querySelector(".blockquote-center textarea");
+  if (tar) {
+    const text = tar.textContent.split(/\r?\n/);
+    tar.insertAdjacentHTML('afterEnd', '<i class="fa fa-caret-up"></i>')
+    typing(tar, text, text[0].length, 0, 0)
+  }
 })
