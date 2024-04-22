@@ -187,5 +187,5 @@ document.addEventListener('DOMContentLoaded', () => {
     typing(tar, text, text[0].length, 0, 0)
   }
   /* third-party/topbar.js */
-  if(window.topbar) topbar.hide
+  if(window.topbar) topbar.hide()
 })
