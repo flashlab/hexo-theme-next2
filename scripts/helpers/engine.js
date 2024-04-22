@@ -20,7 +20,7 @@ hexo.extend.helper.register('next_inject', function(point) {
 hexo.extend.helper.register('next_js', function(file, {
   pjax = false,
   module = false,
-  defer = false
+  attr = ''
 } = {}) {
   const { next_version } = this;
   const { internal, custom_cdn_url } = this.theme.vendors;
@@ -33,7 +33,7 @@ hexo.extend.helper.register('next_js', function(file, {
     custom  : custom_cdn_url
   });
   const src = links[internal] || links.local;
-  return `<script ${pjax ? 'data-pjax ' : ''}${module ? 'type="module" ' : ''}${defer ? 'defer ' : ''}src="${src}"></script>`;
+  return `<script ${pjax ? 'data-pjax ' : ''}${module ? 'type="module" ' : ''}${attr} src="${src}"></script>`;
 });
 
 hexo.extend.helper.register('next_vendors', function(name, prop='') {

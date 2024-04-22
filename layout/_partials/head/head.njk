@@ -43,6 +43,8 @@
 {%- if theme.baidu_site_verification %}
   <meta name="baidu-site-verification" content="{{ theme.baidu_site_verification }}">
 {%- endif %}
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin=""/>
+{{- next_js('topbar.js', { attr: 'async' }) }}
 {%- if theme.pace.enable %}
   {%- if theme.pace.embed %}
     <style>.pace {-webkit-pointer-events: none;pointer-events: none;-webkit-user-select: none;-moz-user-select: none;user-select: none;}.pace-inactive {display: none;}.pace .pace-progress {background: var(--link-hover-color);;position: fixed;z-index: 2000;top: 0;right: 100%;width: 100%;height: 2px;}</style>

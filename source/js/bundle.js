@@ -907,12 +907,9 @@ document.addEventListener('pjax:success', () => {
   }
 });
 
-/* third-party/pace.js */
-Pace.options.restartOnPushState = false;
 
-document.addEventListener('pjax:send', () => {
-  Pace.restart();
-});
+/* third-party/topbar.js */
+if(window.topbar) topbar.hide
 
 /* third-party/giscus.js */
 document.addEventListener('page:loaded', () => {
