@@ -59,7 +59,7 @@
 
 {{ next_vendors('fontawesome', ' media="none" onload="this.media=\'all\'"') }}
 
-{%- if theme.motion.enable %}
+{%- if theme.motion.enable and not theme.bundle %}
   {{ next_vendors('animate_css') }}
 {%- endif %}
 
