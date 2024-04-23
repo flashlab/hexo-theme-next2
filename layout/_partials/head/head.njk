@@ -60,19 +60,3 @@
 {%- endif %}
 {{ next_data('main', next_config()) }}
 
-{%- if not theme.bundle %}
-  {{- next_js('config.js') }}
-  {{ next_font() }}
-{%- endif %}
-<link rel="stylesheet" href="{{ url_for(theme.css) }}/main.css">
-
-{{ next_vendors('fontawesome', ' media="print" onload="this.media=\'all\'"') }}
-
-{%- if theme.motion.enable and not theme.bundle %}
-  {{ next_vendors('animate_css') }}
-{%- endif %}
-
-{%- if theme.fancybox %}
-  {{ next_vendors('fancybox_css') }}
-{%- endif %}
-
