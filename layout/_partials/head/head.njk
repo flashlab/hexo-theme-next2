@@ -61,12 +61,11 @@
 {{ next_data('page', next_config_unique()) }}
 {%- if not theme.bundle %}
   {{- next_js('config.js') }}
+  {{ next_font() }}
 {%- endif %}
 <link rel="stylesheet" href="{{ url_for(theme.css) }}/main.css">
 
-{{ next_font() }}
-
-{{ next_vendors('fontawesome', ' media="none" onload="this.media=\'all\'"') }}
+{{ next_vendors('fontawesome', ' media="print" onload="this.media=\'all\'"') }}
 
 {%- if theme.motion.enable and not theme.bundle %}
   {{ next_vendors('animate_css') }}
