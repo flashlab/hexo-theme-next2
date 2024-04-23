@@ -23,17 +23,13 @@
 
   div {
     display: inline-block;
-
+    if (hexo-config('reward_settings.animation')) {
+      animation: fadeInDown 1s;
+      // The animation may affect :hover of img in dark mode
+      pointer-events: none;
+    }
     span {
       display: block;
-    }
-
-    if (hexo-config('reward_settings.animation')) {
-      &:hover span {
-        animation: next-roll .1s infinite linear;
-        // The animation may affect :hover of img in dark mode
-        pointer-events: none;
-      }
     }
   }
 
@@ -45,7 +41,7 @@
   }
 }
 
-@keyframes next-roll {
+/* @keyframes next-roll {
   from {
     transform: rotateZ(30deg);
   }
@@ -53,4 +49,4 @@
   to {
     transform: rotateZ(-30deg);
   }
-}
+} */

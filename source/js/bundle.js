@@ -1,11 +1,5 @@
 /* schemes/muse.js */
 document.addEventListener('DOMContentLoaded', () => {
-  CONFIG.prism && window.Prism.highlightAll();
-  CONFIG.mediumzoom && window.mediumZoom('.post-body :not(a) > img, .post-body > img', {
-    background: 'var(--content-bg-color)'
-  });
-  CONFIG.lazyload && window.lozad('[data-src]').observe();
-  CONFIG.pangu && window.pangu.spacingPage();
 
   const isRight = CONFIG.sidebar.position === 'right';
 
@@ -62,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateFooterPosition();
   window.addEventListener('resize', updateFooterPosition);
   window.addEventListener('scroll', updateFooterPosition, { passive: true });
+  NexT.boot.refreshx();
 });
 
 /* pjax.js */
@@ -96,6 +91,7 @@ const pjax = new Pjax({
 
 document.addEventListener('pjax:success', () => {
   pjax.executeScripts(document.querySelectorAll('script[data-pjax]'));
+  NexT.boot.refreshx();
   NexT.boot.refresh();
   // Define Motion Sequence & Bootstrap Motion.
   if (CONFIG.motion.enable) {

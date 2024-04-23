@@ -771,6 +771,15 @@ NexT.boot.refresh = function () {
   NexT.utils.registerVideoIframe();
 };
 
+NexT.boot.refreshx = function () {
+  CONFIG.prism && window.Prism.highlightAll();
+  CONFIG.mediumzoom && window.mediumZoom('.post-body :not(a) > img, .post-body > img', {
+    background: 'var(--content-bg-color)'
+  });
+  CONFIG.lazyload && window.lozad('[data-src]').observe();
+  CONFIG.pangu && window.pangu.spacingPage();
+};
+
 NexT.boot.motion = function () {
   // Define Motion Sequence & Bootstrap Motion.
   if (CONFIG.motion.enable) {
