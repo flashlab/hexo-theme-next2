@@ -3,30 +3,59 @@
 
 <div class="post-copyright">
 <ul>
-  <li class="post-copyright-author">
-    {%- if page.author %}
-      <strong>{{ __('post.copyright.post_author') + __('symbol.colon') }} </strong>
-      {{- page.author }}
-    {%- elif author %}
-      <strong>{{ __('post.copyright.author') + __('symbol.colon') }} </strong>
-      {{- author }}
-    {%- endif %}
+  <li class="post-copyright-title">
+    {{ page.title }}
   </li>
   <li class="post-copyright-link">
-    {%- if page.post_link %}
-      <strong>{{ __('post.copyright.post_link') + __('symbol.colon') }}</strong>
-      {{ next_url(page.post_link, page.post_link, {title: page.title}) }}
-    {%- else %}
-      <strong>{{ __('post.copyright.link') + __('symbol.colon') }}</strong>
       {{ next_url(page.permalink, page.permalink, {title: page.title}, true) }}
+  </li>
+  <li class="post-copyright-meta">
+    <div>
+      {%- if page.author %}
+        <div>{{ __('post.copyright.post_author') }}</div>
+        <div>{{- page.author }}</div>
+      {%- elif author %}
+        <div>{{ __('post.copyright.author') }}</div>
+        <div>{{- author }}</div>
+      {%- endif %}
+    </div>
+    {%- if post.date %}
+      <div>
+        <div>{{ __('post.posted') }}</div>
+        <div>{{ date(post.date) }}</div>
+      </div>
     {%- endif %}
+    {%- if post.updated %}
+      <div>
+        <div>{{ __('post.edited') }}</div>
+        <div>{{ date(post.updated) }}</div>
+      </div>
+    {%- endif %}
+    {%- if page.post_link %}
+      <div>
+        <div>{{ __('post.copyright.post_link') }}</div>
+        <div>{{ next_url(page.post_link, page.post_link, {title: page.title}) }}</div>
+      </div>
+    {%- endif %}
+    <div>
+        <div>许可协议</div>
+        <div>
+          {%- if page.author %}
+            原作许可协议
+          {%- elif post.cc_strict %}
+            禁止转载引用
+          {% else %}
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+          {%- endif %}
+        </div>
+      </div>
   </li>
   <li class="post-copyright-license">
-    {%- if page.copyright_reprint %}
-      <strong>{{ __('post.copyright.license_title') + __('symbol.colon') }} </strong>
-      {{- __('post.copyright.license_content_reprint', next_url(ccURL, ccIcon + ccText)) }}
+    {%- if page.author %}
+      转载或引用本文时，请遵守原作许可协议！
+    {%- elif post.cc_strict %}
+      如需转载或引用本文，请先获得作者授权！
     {%- else %}
-      <strong>{{ __('post.copyright.license_title') + __('symbol.colon') }} </strong>
       {{- __('post.copyright.license_content', next_url(ccURL, ccIcon + ccText)) }}
     {%- endif %}
   </li>

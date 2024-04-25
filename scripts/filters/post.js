@@ -12,7 +12,7 @@ hexo.extend.filter.register('marked:renderer', renderer => {
     renderer.image = (...args) => {
       let content = originalImgRender.apply(renderer, args);
       // const href = args[0];
-      return content.replace('src="/.', 'src="' + theme.config.vendors.pic_cdn_url).replace('src="', 'data-src="');
+      return content.replace('src="/.', 'src="' + config.pic_cdn_url).replace('src="', 'data-src="');
     };
   }
   if (theme.config.exturl) {
