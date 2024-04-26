@@ -138,7 +138,7 @@ document.addEventListener('page:loaded', () => {
 });
 
 /* custom */
-window.typing = function typing(el, tl, str_length, index, text_pos) {
+window.typing = function typing(el, tl, str_length, index, text_pos, loop=false) {
   let contents = '';
   let row = Math.max(0, index - 0);//index -7
   while (row < index) {
@@ -152,13 +152,15 @@ window.typing = function typing(el, tl, str_length, index, text_pos) {
     if (index != tl.length) {
       str_length = tl[index].length;
       setTimeout(() => {
-        typing(el, tl, str_length, index, text_pos);
+        typing(el, tl, str_length, index, text_pos, loop);
       }, 1500);
-    }
+    } else if (loop) setTimeout(() => {
+      typing(el, tl, tl[0].length, 0, 0, true);
+    }, 1500);
   }
   else
     setTimeout(() => {
-      typing(el, tl, str_length, index, text_pos);
+      typing(el, tl, str_length, index, text_pos, loop);
     }, 50); // speed
 };
 document.addEventListener('DOMContentLoaded', () => {
@@ -180,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (tar) {
     const text = tar.textContent.split(/\r?\n/);
     tar.insertAdjacentHTML('afterEnd', '<i class="fa fa-caret-up"></i>')
-    typing(tar, text, text[0].length, 0, 0)
+    typing(tar, text, text[0].length, 0, 0, tar.hasAttribute('loop'))
   }
   /* third-party/topbar.js */
   if(window.topbar) topbar.hide()
