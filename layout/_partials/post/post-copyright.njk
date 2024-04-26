@@ -25,7 +25,7 @@
         <div>{{ date(post.date) }}</div>
       </div>
     {%- endif %}
-    {%- if post.updated %}
+    {%- if post.updated and (date(post.updated) != date(post.date)) %}
       <div>
         <div>{{ __('post.edited') }}</div>
         <div>{{ date(post.updated) }}</div>
@@ -45,7 +45,7 @@
           {%- elif post.cc_strict %}
             禁止转载引用
           {% else %}
-            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">CC BY-NC-SA 4.0</a>
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">BY-NC-SA</a>
           {%- endif %}
         </div>
       </div>
