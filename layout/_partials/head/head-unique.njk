@@ -1,5 +1,5 @@
 {{- next_data('page', next_config_unique()) }}
-{%- if page.comments %}
+{%- if theme.giscus.enable %}
   {{ partial('_third-party/comments/giscus.njk', {}, {cache: theme.cache.enable}) }}
 {%- endif %}
 {%- if not theme.bundle %}

@@ -145,6 +145,6 @@
 
 /* third-party/topbar.js */
 
-document.addEventListener('pjax:send', topbar.show());
-document.addEventListener('pjax:complete', topbar.hide());
+document.addEventListener('pjax:send', () => {topbar.show()});
+document.addEventListener('pjax:complete', () => {topbar.hide()});
 if (document.readyState === 'loading') topbar.show()
