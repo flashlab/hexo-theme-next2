@@ -15,17 +15,15 @@ const dateS = new Intl.DateTimeFormat(undefined, {
 })
 async function getFetch(url) {
   let res = {}
-  if (topbar) topbar.show()
+  if (window.topbar) topbar.show()
   try {
     const response = await fetch(url)
     if (response.ok) res = await response.json()
-    if (topbar) topbar.hide()
-    return res
   } catch ({ name, message }) {
-    console.log(name, message)
-    if (topbar) topbar.hide()
-    return {}
+    console.error(name, message)
   }
+  if (window.topbar) topbar.hide()
+  return res
 }
 // pass in a date object and get 'YYYY-MM-DD' string
 function getYYYYMMDD (date) {
@@ -196,7 +194,7 @@ if (calPanel) {
 /* generate sub page */
 const calList = document.querySelector('.art-list')
 if (calList) {
-  getFetch('https://app.313159.xyz/calendar/movies.json').then(rawJson => {
+  getFetch(`https://app.313159.xyz/calendar/${calList.dataset.type}.json`).then(rawJson => {
     let li = ''
     rawJson.forEach(info => {
       let title = info['title'];
@@ -251,7 +249,7 @@ const btnList = document.querySelector('button.collection-header')
 if (btnList) {
   btnList.addEventListener('click', (e) => {
   e.target.disabled=true
-  if (topbar) topbar.show()
+  if (window.topbar) topbar.show()
   const fav = {
     'https://xaoxuu.com': 'https://xaoxuu.com/assets/xaoxuu/favicon/favicon-16x16.png',
     'https://www.cayzlh.com': 'https://gcore.jsdelivr.net/gh/cayzlh/psychic-potato@master/logo/favicon.ico'
@@ -288,7 +286,7 @@ if (btnList) {
         console.error('Error:', error.message);
       }
       document.querySelector('.collection-title').classList.remove('dot-flash')
-      if (topbar) topbar.hide()
+      if (window.topbar) topbar.hide()
     }
   }
   xhr.send()

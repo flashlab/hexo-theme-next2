@@ -482,6 +482,19 @@ HTMLElement.prototype.wrap = function (wrapper) {
       sidebar.classList.replace(activeClassNames[1 - index], activeClassNames[index]);
     },
   
+    updateFooterPosition: function() {
+      if (CONFIG.scheme === 'Pisces' || CONFIG.scheme === 'Gemini') return;
+      function updateFooterPosition() {
+        const footer = document.querySelector('.footer');
+        const containerHeight = document.querySelector('.main').offsetHeight + footer.offsetHeight;
+        footer.classList.toggle('footer-fixed', containerHeight <= window.innerHeight);
+      }
+  
+      updateFooterPosition();
+      window.addEventListener('resize', updateFooterPosition);
+      window.addEventListener('scroll', updateFooterPosition, { passive: true });
+    },
+
     getScript: function (src, options = {}, legacyCondition) {
       if (typeof options === 'function') {
         return this.getScript(src, {
@@ -675,8 +688,8 @@ HTMLElement.prototype.wrap = function (wrapper) {
       const sequence = [];
       const sidebar = document.querySelectorAll('.sidebar-inner');
       const sidebarTransition = CONFIG.motion.transition.sidebar;
-      // Only for Pisces | Gemini.
-      if (sidebarTransition && (CONFIG.scheme === 'Pisces' || CONFIG.scheme === 'Gemini')) {
+    // Only for desktop of Pisces | Gemini.
+    if (sidebarTransition && (CONFIG.scheme === 'Pisces' || CONFIG.scheme === 'Gemini') && window.innerWidth >= 992) {
         sidebar.forEach(targets => {
           sequence.push({
             targets,
@@ -703,6 +716,7 @@ NexT.boot.registerEvents = function () {
 
   NexT.utils.registerScrollPercent();
   NexT.utils.registerCanIUseTag();
+  NexT.utils.updateFooterPosition();
 
   // Mobile top menu bar.
   document.querySelector('.site-nav-toggle .toggle').addEventListener('click', event => {
@@ -764,14 +778,10 @@ NexT.boot.motion = function () {
   if (CONFIG.motion.enable) {
     NexT.motion.integrator
       .add(NexT.motion.middleWares.header)
-      .add(NexT.motion.middleWares.postList)
       .add(NexT.motion.middleWares.sidebar)
+      .add(NexT.motion.middleWares.postList)
       .add(NexT.motion.middleWares.footer)
       .bootstrap();
   }
   NexT.utils.updateSidebarPosition();
 };
-
-NexT.boot.registerEvents();
-NexT.boot.refresh();
-NexT.boot.motion();

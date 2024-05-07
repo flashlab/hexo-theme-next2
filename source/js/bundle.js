@@ -1,4 +1,4 @@
-/* schemes/muse.js */
+/* sidebar.js */
 document.addEventListener('DOMContentLoaded', () => {
 
   const isRight = CONFIG.sidebar.position === 'right';
@@ -45,17 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.classList.remove('sidebar-active');
     }
   };
-  if (CONFIG.sidebar.display !== 'remove') sidebarToggleMotion.init();
-
-  function updateFooterPosition() {
-    const footer = document.querySelector('.footer');
-    const containerHeight = document.querySelector('.main').offsetHeight + footer.offsetHeight;
-    footer.classList.toggle('footer-fixed', containerHeight <= window.innerHeight);
-  }
-
-  updateFooterPosition();
-  window.addEventListener('resize', updateFooterPosition);
-  window.addEventListener('scroll', updateFooterPosition, { passive: true });
+  sidebarToggleMotion.init();
+  NexT.boot.registerEvents();
+  NexT.boot.refresh();
+  NexT.boot.motion();
   NexT.boot.refreshx();
 });
 
@@ -91,16 +84,16 @@ const pjax = new Pjax({
 
 document.addEventListener('pjax:success', () => {
   pjax.executeScripts(document.querySelectorAll('script[data-pjax]'));
-  NexT.boot.refreshx();
   NexT.boot.refresh();
+  NexT.boot.refreshx();
   // Define Motion Sequence & Bootstrap Motion.
   if (CONFIG.motion.enable) {
     NexT.motion.integrator
       .init()
       .add(NexT.motion.middleWares.subMenu)
-      .add(NexT.motion.middleWares.postList)
       // Add sidebar-post-related transition.
       .add(NexT.motion.middleWares.sidebar)
+      .add(NexT.motion.middleWares.postList)
       .bootstrap();
   }
   if (CONFIG.sidebar.display !== 'remove') {
