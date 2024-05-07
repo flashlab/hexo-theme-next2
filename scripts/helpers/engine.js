@@ -33,7 +33,7 @@ hexo.extend.helper.register('next_js', function(file, {
     custom  : custom_cdn_url
   });
   const src = links[internal] || links.local;
-  return `<script ${pjax ? 'data-pjax ' : ''}${module ? 'type="module" ' : ''}${attr} src="${src}"></script>`;
+  return `<script ${pjax ? 'data-pjax ' : ''}${module ? 'type="module" ' : ''}${attr ? ` ${attr} ` : ''}src="${src}"></script>`;
 });
 
 hexo.extend.helper.register('next_vendors', function(name, prop='') {
