@@ -399,6 +399,23 @@ HTMLElement.prototype.wrap = function (wrapper) {
         document.querySelector('.post-reward').classList.toggle('active');
       });
     },
+
+    registerThemeToggle: function () {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) document.body.classList.toggle('darkmode', true);
+      document.querySelector('.theme-toggle a').addEventListener('click', () => {
+        const theme = document.body.classList.toggle('darkmode') ? 'noborder_dark' : 'noborder_light';
+        function sendMessage(message) {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+            setConfig: {
+                theme: theme,
+            },
+        });
+      });
+    },
   
     activateNavByIndex: function (index) {
       const nav = document.querySelector('.post-toc:not(.placeholder-toc) .nav');
@@ -717,6 +734,7 @@ NexT.boot.registerEvents = function () {
   NexT.utils.registerScrollPercent();
   NexT.utils.registerCanIUseTag();
   NexT.utils.updateFooterPosition();
+  NexT.utils.registerThemeToggle();
 
   // Mobile top menu bar.
   document.querySelector('.site-nav-toggle .toggle').addEventListener('click', event => {
