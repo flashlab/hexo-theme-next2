@@ -121,7 +121,7 @@ document.addEventListener('page:loaded', () => {
         'data-strict'           : CONFIG.giscus.strict,
         'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
         'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
-        'data-theme'            : CONFIG.giscus.theme,
+        'data-theme'            : CONFIG.giscus.theme || document.body.classList.contains('darkmode') ? 'dark' : 'light',
         'data-lang'             : CONFIG.giscus.lang,
         'data-input-position'   : CONFIG.giscus.input_position,
         'data-loading'          : CONFIG.giscus.loading

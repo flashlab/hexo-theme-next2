@@ -403,7 +403,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
     registerThemeToggle: function () {
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) document.body.classList.toggle('darkmode', true);
       document.querySelector('.theme-toggle a').addEventListener('click', () => {
-        const theme = document.body.classList.toggle('darkmode') ? 'noborder_dark' : 'noborder_light';
+        const theme = document.body.classList.toggle('darkmode') ? 'dark' : 'light';
         function sendMessage(message) {
           const iframe = document.querySelector('iframe.giscus-frame');
           if (!iframe) return;
