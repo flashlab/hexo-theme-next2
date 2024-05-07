@@ -90,7 +90,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
   
   NexT.utils = {
   
-    registerExtURL: function () {
+    registerExtURL() {
       document.querySelectorAll('span.exturl').forEach(element => {
         const link = document.createElement('a');
         // https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
@@ -106,7 +106,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       });
     },
   
-    registerCodeblock: function (element) {
+    registerCodeblock(element) {
       const inited = !!element;
       let figure = (inited ? element : document).querySelectorAll('figure.highlight');
       let isHljsWithWrap = true;
@@ -196,7 +196,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       });
     },
   
-    wrapTableWithBox: function () {
+    wrapTableWithBox() {
       document.querySelectorAll('table').forEach(element => {
         const box = document.createElement('div');
         box.className = 'table-container';
@@ -204,7 +204,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       });
     },
   
-    registerVideoIframe: function () {
+    registerVideoIframe() {
       document.querySelectorAll('iframe').forEach(element => {
         const supported = [
           'www.youtube.com',
@@ -226,7 +226,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       });
     },
   
-    updateActiveNav: function () {
+    updateActiveNav() {
       if (!Array.isArray(NexT.utils.sections)) return;
       let index = NexT.utils.sections.findIndex(element => {
         return element && element.getBoundingClientRect().top > 10;
@@ -239,7 +239,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       this.activateNavByIndex(index);
     },
   
-    registerScrollPercent: function () {
+    registerScrollPercent() {
       const backToTop = document.querySelector('.back-to-top');
       const readingProgressBar = document.querySelector('.reading-progress-bar');
       // For init back to top in sidebar if page was scrolled after page refresh.
@@ -271,7 +271,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
     /**
      * Tabs tag listener (without twitter bootstrap).
      */
-    registerTabsTag: function () {
+    registerTabsTag() {
       // Binding `nav-tabs` & `tab-content` by real time permalink changing.
       document.querySelectorAll('.tabs ul.nav-tabs .tab').forEach(element => {
         element.addEventListener('click', event => {
@@ -336,7 +336,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       window.dispatchEvent(new Event('tabs:register'));
     },
   
-    registerCanIUseTag: function () {
+    registerCanIUseTag() {
       // Get responsive height passed from iframe.
       window.addEventListener('message', ({ data }) => {
         if (typeof data === 'string' && data.includes('ciu_embed')) {
@@ -347,7 +347,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       }, false);
     },
   
-    registerActiveMenuItem: function () {
+    registerActiveMenuItem() {
       document.querySelectorAll('.menu-item a[href]').forEach(target => {
         const isSamePath = target.pathname === location.pathname || target.pathname === location.pathname.replace('index.html', '');
         const isSubPath = !CONFIG.root.startsWith(target.pathname) && location.pathname.startsWith(target.pathname);
@@ -355,7 +355,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       });
     },
   
-    registerLangSelect: function () {
+    registerLangSelect() {
       const selects = document.querySelectorAll('.lang-select');
       selects.forEach(sel => {
         sel.value = CONFIG.page.lang;
@@ -370,7 +370,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       });
     },
   
-    registerSidebarTOC: function () {
+    registerSidebarTOC() {
       this.sections = [...document.querySelectorAll('.post-toc:not(.placeholder-toc) li a.nav-link')].map(element => {
         const target = document.getElementById(decodeURI(element.getAttribute('href')).replace('#', ''));
         // TOC item animation navigate.
@@ -392,7 +392,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       this.updateActiveNav();
     },
   
-    registerPostReward: function () {
+    registerPostReward() {
       const button = document.querySelector('.reward-container button');
       if (!button) return;
       button.addEventListener('click', () => {
@@ -400,7 +400,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       });
     },
 
-    registerThemeToggle: function () {
+    registerThemeToggle() {
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) document.body.classList.toggle('darkmode', true);
       document.querySelector('.theme-toggle a').addEventListener('click', () => {
         const theme = document.body.classList.toggle('darkmode') ? 'dark' : 'light';
@@ -417,7 +417,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       });
     },
   
-    activateNavByIndex: function (index) {
+    activateNavByIndex(index) {
       const nav = document.querySelector('.post-toc:not(.placeholder-toc) .nav');
       if (!nav) return;
   
@@ -458,7 +458,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       });
     },
   
-    updateSidebarPosition: function () {
+    updateSidebarPosition() {
       if (window.innerWidth < 1200 || CONFIG.scheme === 'Pisces' || CONFIG.scheme === 'Gemini') return;
       // Expand sidebar on post detail page by default, when post has a toc.
       const hasTOC = document.querySelector('.post-toc:not(.placeholder-toc)');
@@ -472,7 +472,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       }
     },
   
-    activateSidebarPanel: function (index) {
+    activateSidebarPanel(index) {
       const sidebar = document.querySelector('.sidebar-inner');
       const activeClassNames = ['sidebar-toc-active', 'sidebar-overview-active'];
       if (sidebar.classList.contains(activeClassNames[index])) return;
@@ -512,7 +512,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       window.addEventListener('scroll', updateFooterPosition, { passive: true });
     },
 
-    getScript: function (src, options = {}, legacyCondition) {
+    getScript(src, options = {}, legacyCondition) {
       if (typeof options === 'function') {
         return this.getScript(src, {
           condition: legacyCondition
@@ -563,7 +563,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       });
     },
   
-    loadComments: function (selector, legacyCallback) {
+    loadComments(selector, legacyCallback) {
       if (legacyCallback) {
         return this.loadComments(selector).then(legacyCallback);
       }
@@ -582,6 +582,15 @@ HTMLElement.prototype.wrap = function (wrapper) {
         });
         intersectionObserver.observe(element);
       });
+    },
+
+    debounce(func, wait) {
+      let timeout;
+      return function(...args) {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
+      };
     }
   };
   
@@ -590,17 +599,17 @@ HTMLElement.prototype.wrap = function (wrapper) {
   
   NexT.motion.integrator = {
     queue: [],
-    init: function () {
+    init() {
       this.queue = [];
       return this;
     },
-    add: function (fn) {
+    add(fn) {
       const sequence = fn();
       if (CONFIG.motion.async) this.queue.push(sequence);
       else this.queue = this.queue.concat(sequence);
       return this;
     },
-    bootstrap: function () {
+    bootstrap() {
       if (!window.anime) return;
       if (!CONFIG.motion.async) this.queue = [this.queue];
       this.queue.forEach(sequence => {
@@ -617,7 +626,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
   };
   
   NexT.motion.middleWares = {
-    header: function () {
+    header() {
       const sequence = [];
   
       function getMistLineSettings(targets) {
@@ -660,7 +669,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       return sequence;
     },
   
-    subMenu: function () {
+    subMenu() {
       const subMenuItem = document.querySelectorAll('.sub-menu .menu-item');
       if (subMenuItem.length > 0) {
         subMenuItem.forEach(element => {
@@ -670,7 +679,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       return [];
     },
   
-    postList: function () {
+    postList() {
       const sequence = [];
       const { post_block, post_header, post_body, coll_header } = CONFIG.motion.transition;
   
@@ -701,7 +710,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       return sequence;
     },
   
-    sidebar: function () {
+    sidebar() {
       const sequence = [];
       const sidebar = document.querySelectorAll('.sidebar-inner');
       const sidebarTransition = CONFIG.motion.transition.sidebar;
@@ -718,7 +727,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
       return sequence;
     },
   
-    footer: function () {
+    footer() {
       return [{
         targets: document.querySelector('.footer'),
         opacity: 1
