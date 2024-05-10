@@ -62,7 +62,7 @@
     position: relative;
     transition: border $transition-ease;
 
-    &::before, img {
+    &::before, &>img {
       background: $grey;
       border: 1px solid white;
       left: -6px;
@@ -72,7 +72,7 @@
       round-icon(6px);
     }
 
-    img {
+    &>img {
       height: 16px;
       width: 16px;
       left: -11px;

@@ -7,30 +7,32 @@ const { encodeURL, unescapeHTML } = require('hexo-util');
 
 hexo.extend.filter.register('marked:renderer', renderer => {
   const { config, theme } = hexo;
-  const originalImgRender = renderer.image;
+  // const originalImgRender = renderer.image;
   renderer.image = (...args) => {
-    //let content = originalImgRender.apply(renderer, args);
+    // let content = originalImgRender.apply(renderer, args);
     // const href = args[0];
     if (!/^(#|\/\/|http(s)?:)/.test(args[0]) && config.marked.prependRoot) {
       // skip postPath option
       args[0] = config.pic_cdn_url + args[0]
     }
-    let out = `<img ${theme.config.lazyload ? 'data-src' : 'src'}="${encodeURL(args[0])}"`
+    let out = ''
+    const arrurl = args[0].split('?')
+    if (arrurl.length > 1) {
+      args[0] = arrurl[0]
+      try {
+        const size = new URLSearchParams(arrurl[1]).get('size')
+        const matched = size.match(/^(\d+)x(\d+)$/)
+        if (matched) {
+          out += ` width="${matched[1]}" height="${matched[2]}" style="aspect-ratio: ${matched[1]} / ${matched[2]};"`
+        }
+      } catch  { }
+    }
+    if (args[1]) out += ` title="${args[1]}"`
     if (args[2]) out += ` alt="${args[2]}"`
-    if (args[1]) {
-      const [size, ...titl] = args[1].split(' ')
-      const matched = size.match(/^(\d+)x(\d+)$/, size)
-      if (matched) {
-        out += ` width="${matched[1]}" height="${matched[2]}" style="aspect-ratio: ${matched[1]} / ${matched[2]};"`
-        args[1] = titl.join(' ')
-      }
-      if (args[1]) out += ` title="${args[1]}"`
-    };
     if (config.marked.lazyload) out += ' loading="lazy"';
-
-    out += '>';
+    out = `<img ${theme.config.lazyload ? 'data-src' : 'src'}="${encodeURL(args[0])}"${out}>`
     if (config.marked.figcaption && args[2]) {
-      return `<figure>${out}<figcaption aria-hidden="true">${args.join(' ')}</figcaption></figure>`;
+      return `<figure>${out}<figcaption aria-hidden="true">${args[2]}</figcaption></figure>`;
     }
     return out;
   };

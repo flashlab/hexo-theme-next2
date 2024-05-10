@@ -74,10 +74,26 @@ hexo.extend.helper.register('next_pre', function() {
 
 hexo.extend.helper.register('post_gallery', function(photos) {
   if (!photos || !photos.length) return '';
-  const content = photos.map(photo => `
+  const content = photos.map(photo => {
+    let purl = this.url_for(photo)
+    let out = ''
+    const arrurl = purl.split('?')
+    if (arrurl.length > 1) {
+      purl = arrurl[0]
+      try {
+        const size = new URLSearchParams(arrurl[1]).get('size')
+        const matched = size.match(/^(\d+)x(\d+)$/)
+        if (matched) {
+          out += ` width="${matched[1]}" height="${matched[2]}" style="aspect-ratio: ${matched[1]} / ${matched[2]};"`
+        }
+      } catch  { }
+    }
+    if (this.config.marked.lazyload) out += ' loading="lazy"'
+    return `
     <div class="post-gallery-image">
-      <img src="${this.url_for(photo)}" itemprop="contentUrl">
-    </div>`).join('');
+      <img src="${!/^(#|\/\/|http(s)?:)/.test(purl) && (this.config.pic_cdn_url ?? '')}${purl}"${out} itemprop="contentUrl">
+    </div>`
+  }).join('');
   return `<div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
     ${content}
     </div>`;

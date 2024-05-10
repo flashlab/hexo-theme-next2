@@ -44,7 +44,9 @@
       {### END PAGE BODY ###}
       {#####################}
     </div>
-    {%- include '_partials/page/breadcrumb.njk' -%}
+    {%- if page.headercrumb !== false %}
+      {%- include '_partials/page/breadcrumb.njk' -%}
+    {%- endif %}
     {######################}
     {### END PAGE BLOCK ###}
     {######################}
