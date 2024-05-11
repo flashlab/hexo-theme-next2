@@ -144,15 +144,15 @@ window.typing = function typing(el, tl, str_length, index, text_pos, loop=false)
     index++;
     if (index != tl.length) {
       str_length = tl[index].length;
-      setTimeout(() => {
+      window.typID = setTimeout(() => {
         typing(el, tl, str_length, index, text_pos, loop);
       }, 1500);
-    } else if (loop) setTimeout(() => {
+    } else if (loop) window.typID = setTimeout(() => {
       typing(el, tl, tl[0].length, 0, 0, true);
     }, 1500);
   }
   else
-    setTimeout(() => {
+    window.typID = setTimeout(() => {
       typing(el, tl, str_length, index, text_pos, loop);
     }, 50); // speed
 };
@@ -171,12 +171,17 @@ document.addEventListener('DOMContentLoaded', () => {
     ).replace(/,/g, '') + '\n---'
     open(`https://github.com/flashlab/flashlab.github.io/new/main/source/_posts?filename=miao.md&value=${encodeURIComponent(values)}`)
   });
+
+  /* third-party/topbar.js */
+  if(window.topbar) topbar.hide()
+});
+
+document.addEventListener('page:loaded', () => {
   const tar = document.querySelector(".blockquote-center textarea");
   if (tar) {
+    clearTimeout(window.typID);
     const text = tar.textContent.split(/\r?\n/);
     tar.insertAdjacentHTML('afterEnd', '<i class="fa fa-caret-up"></i>')
     typing(tar, text, text[0].length, 0, 0, tar.hasAttribute('loop'))
   }
-  /* third-party/topbar.js */
-  if(window.topbar) topbar.hide()
 })
