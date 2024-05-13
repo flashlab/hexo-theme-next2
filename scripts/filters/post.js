@@ -9,8 +9,9 @@ hexo.extend.filter.register('marked:renderer', renderer => {
   const { config, theme } = hexo;
   // const originalImgRender = renderer.image;
   renderer.image = (...args) => {
+    // ![alt](/filename.webp?widthxheight "title|inline")
     // let content = originalImgRender.apply(renderer, args);
-    // const href = args[0];
+    // const href = args[0], title = args[1], alt = args[2];
     if (!/^(#|\/\/|http(s)?:)/.test(args[0]) && config.marked.prependRoot) {
       // skip postPath option
       args[0] = config.pic_cdn_url + args[0]
@@ -18,21 +19,25 @@ hexo.extend.filter.register('marked:renderer', renderer => {
     let out = ''
     const arrurl = args[0].split('?')
     if (arrurl.length > 1) {
-      args[0] = arrurl[0]
       try {
         const size = new URLSearchParams(arrurl[1]).get('size')
         const matched = size.match(/^(\d+)x(\d+)$/)
         if (matched) {
           out += ` width="${matched[1]}" height="${matched[2]}" style="aspect-ratio: ${matched[1]} / ${matched[2]};"`
+          size.delete('size')
+          args[0] = `${arrurl[0]}?${size.toString()}`
         }
       } catch  { }
     }
-    if (args[1]) out += ` title="${args[1]}"`
+    if (args[1]) {
+      if (args[1] === 'inline') out += ` class="inline"`
+      else out += ` title="${args[1]}"`
+    }
     if (args[2]) out += ` alt="${args[2]}"`
     if (config.marked.lazyload) out += ' loading="lazy"';
     out = `<img ${theme.config.lazyload ? 'data-src' : 'src'}="${encodeURL(args[0])}"${out}>`
-    if (config.marked.figcaption && args[2]) {
-      return `<figure>${out}<figcaption aria-hidden="true">${args[2]}</figcaption></figure>`;
+    if (config.marked.figcaption && args[2] && args[1] != 'inline') {
+      return `<figure>${out}<figcaption aria-hidden="true">${args[2]}</figcaption></figure>`
     }
     return out;
   };
