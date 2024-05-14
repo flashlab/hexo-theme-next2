@@ -413,19 +413,21 @@ HTMLElement.prototype.wrap = function (wrapper) {
 
     registerThemeToggle() {
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) document.body.classList.toggle('darkmode', true);
-      document.querySelector('.theme-toggle a').addEventListener('click', () => {
-        const theme = document.body.classList.toggle('darkmode') ? 'dark' : 'light';
-        function sendMessage(message) {
-          const iframe = document.querySelector('iframe.giscus-frame');
-          if (!iframe) return;
-          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
-        }
-        sendMessage({
-            setConfig: {
-                theme: theme,
-            },
+      document.querySelectorAll('.theme-toggle').forEach(element => {
+        element.addEventListener('click', () => {
+          const theme = document.body.classList.toggle('darkmode') ? 'dark' : 'light';
+          function sendMessage(message) {
+            const iframe = document.querySelector('iframe.giscus-frame');
+            if (!iframe) return;
+            iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+          }
+          sendMessage({
+              setConfig: {
+                  theme: theme,
+              },
+          });
         });
-      });
+      })
     },
   
     activateNavByIndex(index) {
