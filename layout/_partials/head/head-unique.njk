@@ -17,7 +17,9 @@
 {%- if theme.fancybox %}
   {{ next_vendors('fancybox_css') }}
 {%- endif %}
-
+{%- if is_post() %}
+<meta name="description" content="{{ trim(strip_html(page.content).slice(0, 99)) }}">
+{%- endif %}
 {%- if theme.open_graph.enable %}
   {%- if theme.open_graph.options %}
     {{ open_graph(theme.open_graph.options) }}
