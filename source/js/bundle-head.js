@@ -630,7 +630,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
           easing: 'linear'
         });
         sequence.forEach(item => {
-          if (item.deltaT) timeline.add(item, item.deltaT);
+          if (item.deltaT !== undefined) timeline.add(item, item.deltaT);
           else timeline.add(item);
         });
       });
@@ -645,8 +645,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
         sequence.push({
           targets,
           scaleX: [0, 1],
-          duration: 500,
-          deltaT: '-=200'
+          duration: 500
         });
       }
   
@@ -659,21 +658,21 @@ HTMLElement.prototype.wrap = function (wrapper) {
         });
       }
   
-      pushToSequence('.column');
+      //pushToSequence('.column');
       CONFIG.scheme === 'Mist' && getMistLineSettings('.logo-line');
       CONFIG.scheme === 'Muse' && pushToSequence('.custom-logo-image');
       pushToSequence('.site-title');
       pushToSequence('.site-brand-container .toggle', true);
-      pushToSequence('.site-subtitle');
+      if (document.querySelector('.site-subtitle')) pushToSequence('.site-subtitle');
       (CONFIG.scheme === 'Pisces' || CONFIG.scheme === 'Gemini') && pushToSequence('.custom-logo-image');
   
       const menuItemTransition = CONFIG.motion.transition.menu_item;
       if (menuItemTransition) {
-        document.querySelectorAll('.menu-item').forEach(targets => {
+        document.querySelectorAll('.menu-item').forEach((targets, index) => {
           sequence.push({
             targets,
             complete: () => targets.classList.add('animated', menuItemTransition),
-            deltaT: '-=200'
+            deltaT: index < 4 ? index * 100 : 300
           });
         });
       }
@@ -710,7 +709,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
         sequence.push({
           targets,
           complete: () => targets.classList.add('animated', post_block),
-          deltaT: '-=100'
+          deltaT: '-=200'
         });
         animate(coll_header, targets.querySelectorAll('.collection-header'));
         animate(post_header, targets.querySelectorAll('.post-header'));
