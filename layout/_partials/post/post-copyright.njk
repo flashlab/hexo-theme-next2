@@ -25,10 +25,10 @@
         <div>{{ date(post.date) }}</div>
       </div>
     {%- endif %}
-    {%- if post.updated and (date(post.updated) != date(post.date)) %}
+    {%- if post.edited %}
       <div>
         <div>{{ __('post.edited') }}</div>
-        <div>{{ date(post.updated) }}</div>
+        <div>{{ date(post.edited) }}</div>
       </div>
     {%- endif %}
     {%- if page.post_link %}
