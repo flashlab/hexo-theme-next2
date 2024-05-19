@@ -11,6 +11,9 @@
   width: 715px;
   height: 128px;
 }
+.cal-container>svg+svg {
+    display: none;
+}
 .cal-container rect {
   fill: #21262d;
   filter: invert(100%);
@@ -190,20 +193,6 @@
 }
 
 /* link-list */
-.label {
-  border-radius: 3px;
-  margin-left: 2px;
-  color: white !important;
-  padding: 0 6px !important;
-
-  &.info {
-    background: #428bca !important; //#5cb85c !important;
-  }
-
-  &.warn {
-    background: #e7c000 !important;
-  }
-}
 .link-list {
   gap: 1rem;
   grid-gap: 1rem;
@@ -269,9 +258,9 @@
 }
 
 .link-list-container .label
-  font-size: 0.8em;
   line-height: 1.2em;
-  vertical-align: top;
+  vertical-align: super;
+  margin-left: 2px;
 
 @media (max-width: 767px) {
   .link-list {
