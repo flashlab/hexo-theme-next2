@@ -4,13 +4,15 @@
 
 const { parse } = require('url');
 const { encodeURL, unescapeHTML } = require('hexo-util');
+const { config, theme } = hexo;
+const preRegex = /<pre><code.*?<\/code><\/pre>/igs
+const figRegex = /<figure\sclass=(.*?)>(.*?)<\/figure>/igs
+const isWrap = config.highlight.line_number || config.highlight.wrap
 
 hexo.extend.filter.register('marked:renderer', renderer => {
-  const { config, theme } = hexo;
-  // const originalImgRender = renderer.image;
+  const originalTblRender = renderer.table;
   renderer.image = (...args) => {
-    // ![alt](/filename.webp?widthxheight "title|inline")
-    // let content = originalImgRender.apply(renderer, args);
+    // ![alt](/filename.webp?size=widthxheight "title|inline")
     // const href = args[0], title = args[1], alt = args[2];
     if (!/^(#|\/\/|http(s)?:)/.test(args[0]) && config.marked.prependRoot) {
       // skip postPath option
@@ -27,7 +29,7 @@ hexo.extend.filter.register('marked:renderer', renderer => {
           out += ` width="${matched[1]}" height="${matched[2]}" style="aspect-ratio: ${matched[1]} / ${matched[2]};"`
           param.delete('size')
         }
-        const classname = decodeURI(param?.get('class'))
+        const classname = decodeURI(param?.get('class') ?? '')
         if (classname) {
           out += ` class="${classname}"`
           param.delete('class')
@@ -44,6 +46,10 @@ hexo.extend.filter.register('marked:renderer', renderer => {
       return `<figure>${out}<figcaption aria-hidden="true">${args[2]}</figcaption></figure>`
     }
     return out;
+  };
+  renderer.table = (...args) => {
+    let content = originalTblRender.apply(renderer, args);
+    return `<div class="table-container">${content}</div>`
   };
   if (theme.config.exturl) {
     const siteHost = parse(config.url).hostname || config.url;
@@ -71,4 +77,17 @@ hexo.extend.filter.register('marked:renderer', renderer => {
   }
 }, 99);
 
-//hexo.extend.filter.register('after_post_render', data => { }, 0);
+hexo.extend.filter.register('after_post_render', data => {
+  let suffix = ''
+  if (theme.config.codeblock.fold.enable) suffix += '<div class="fold-cover"></div><div class="expand-btn"><i class="fa fa-angle-down fa-fw"></i></div>'
+  if (theme.config.codeblock.copy_button.enable) suffix += '<div class="copy-btn"><i class="fa fa-copy fa-fw"></i></div>'
+  if (!isWrap) {
+    data.content = data.content.replace(preRegex, '<div class="code-container notranslate">$&'+suffix+'</div>')
+  } else if (suffix) {
+    data.content = data.content.replace(figRegex, (ori, cls, inn) => {
+      if (!['highlight', 'hljs'].some(cl => cls.includes(cl))) return ori;
+      return `<figure class=${cls}>${inn}${suffix}</figure>`
+    })
+  }
+  return data
+}, 0);

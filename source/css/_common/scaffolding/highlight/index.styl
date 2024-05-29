@@ -16,12 +16,12 @@ if (false and hexo-config('darkmode')) {
 @require 'fold' if (hexo-config('codeblock.fold.enable'));
 
 // Placeholder: $code-inline $code-block
-$code-inline {
+$code-inline, code.hljs, .code-container {
   background: var(--highlight-background);
   color: var(--highlight-foreground);
 }
 
-$code-block {
+$code-block, .code-container {
   @extend $code-inline;
   line-height: $line-height-code-block;
   margin: 0 auto 20px;
@@ -72,7 +72,7 @@ kbd {
 figure.highlight {
   @extend $code-block;
   // Reduce DOM reflow with wrapTableWithBox
-  overflow: auto;
+  overflow: hidden;
   position: relative;
 
   pre {
@@ -82,6 +82,8 @@ figure.highlight {
   }
 
   table {
+    display: block;
+    overflow: auto;
     border: 0;
     margin: 0;
     width: auto;

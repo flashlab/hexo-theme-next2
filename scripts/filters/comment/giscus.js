@@ -12,6 +12,7 @@ hexo.extend.filter.register('theme_inject', injects => {
   injects.comment.raw('giscus', `
   {% if page.comments %}
   <div class="comments giscus-container">
+  <img src="/attach/dinosaur.png" alt="loading comments..." loading="lazy" class="inline"><br>
   </div>
   {% endif %}
   `,);

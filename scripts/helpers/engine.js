@@ -41,7 +41,7 @@ hexo.extend.helper.register('next_vendors', function(name, prop='') {
   const type = url.endsWith('css') ? 'css' : 'js';
   if (integrity) prop += ` integrity="${integrity}" crossorigin="anonymous"`
   if (type === 'css') {
-    return `<link rel="stylesheet" href="${url}"${prop}>`;
+    return `<link${prop.includes('rel=') ? '' : 'rel="stylesheet"'} href="${url}"${prop}>`;
   }
   return `<script src="${url}"${prop}></script>`;
 });

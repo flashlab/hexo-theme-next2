@@ -81,7 +81,7 @@ get_font_family(config) {
 }
 
 // Font families.
-$font-family-chinese      = 'LXGW WenKai GB Screen', 'PingFang SC', 'Microsoft YaHei';
+$font-family-chinese      = 'LXGW WenKai Screen', 'PingFang SC', 'Microsoft YaHei';
 
 $font-family-base         = $font-family-chinese, sans-serif;
 $font-family-base         = get_font_family('global'), $font-family-chinese, sans-serif if get_font_family('global');
@@ -95,8 +95,8 @@ $font-family-headings     = get_font_family('headings'), $font-family-base if ge
 $font-family-posts        = $font-family-base;
 $font-family-posts        = get_font_family('posts'), $font-family-base if get_font_family('posts');
 
-$font-family-monospace    = consolas, Menlo, monospace, $font-family-chinese;
-$font-family-monospace    = get_font_family('codes'), consolas, Menlo, monospace, $font-family-chinese if get_font_family('codes');
+$font-family-monospace    = consolas, Menlo, $font-family-chinese, monospace;
+$font-family-monospace    = get_font_family('codes'), consolas, Menlo, $font-family-chinese, monospace if get_font_family('codes');
 
 
 // Font size
@@ -200,12 +200,6 @@ $content-desktop-largest        = 900px;
 $content-desktop-padding        = 40px;
 $content-tablet-padding         = 10px;
 $content-mobile-padding         = 8px;
-
-
-// Headband
-// --------------------------------------------------
-$headband-height                = 3px;
-$headband-bg                    = var(--theme-color);
 
 
 // Site Meta

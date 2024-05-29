@@ -140,14 +140,6 @@ NexT.utils = {
     });
   },
 
-  wrapTableWithBox() {
-    document.querySelectorAll('table').forEach(element => {
-      const box = document.createElement('div');
-      box.className = 'table-container';
-      element.wrap(box);
-    });
-  },
-
   registerVideoIframe() {
     document.querySelectorAll('iframe').forEach(element => {
       const supported = [

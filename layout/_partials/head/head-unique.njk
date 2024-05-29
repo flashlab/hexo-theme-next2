@@ -8,7 +8,7 @@
 {%- endif %}
 <link rel="stylesheet" href="{{ url_for(theme.css) }}/main.css">
 
-{{ next_vendors('fontawesome', ' media="print" onload="this.media=\'all\'"') }}
+{{ next_vendors('fontawesome', ' rel="preload" as="style" onload="this.onload=null;this.rel=\'stylesheet\'"') }}
 
 {%- if theme.motion.enable and not theme.bundle %}
   {{ next_vendors('animate_css') }}

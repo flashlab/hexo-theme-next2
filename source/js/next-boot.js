@@ -50,7 +50,6 @@ NexT.boot.refresh = function() {
   CONFIG.pangu && window.pangu.spacingPage();
 
   CONFIG.exturl && NexT.utils.registerExtURL();
-  NexT.utils.wrapTableWithBox();
   NexT.utils.registerCodeblock();
   NexT.utils.registerTabsTag();
   NexT.utils.registerActiveMenuItem();

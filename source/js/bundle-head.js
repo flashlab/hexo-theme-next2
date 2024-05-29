@@ -108,7 +108,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
 
     registerCopyButton(target, element, code = '') {
       // One-click copy code support.
-      target.insertAdjacentHTML('beforeend', '<div class="copy-btn"><i class="fa fa-copy fa-fw"></i></div>');
+      //target.insertAdjacentHTML('beforeend', '<div class="copy-btn"><i class="fa fa-copy fa-fw"></i></div>');
       const button = target.querySelector('.copy-btn');
       button.addEventListener('click', () => {
         if (!code) {
@@ -155,63 +155,25 @@ HTMLElement.prototype.wrap = function (wrapper) {
       if (CONFIG.hljswrap) {
         figure = (inited ? element : document).querySelectorAll('figure.highlight');
       } else {
-        figure = document.querySelectorAll('pre');
+        figure = document.querySelectorAll('.code-container');
       }
       figure.forEach(element => {
         // Skip pre > .mermaid for folding and copy button
         if (element.querySelector('.mermaid')) return;
-        if (!inited) {
-          let span = element.querySelectorAll('.code .line span');
-          if (span.length === 0) {
-            // Hljs without line_number and wrap
-            span = element.querySelectorAll('code.highlight span');
-          }
-          span.forEach(s => {
-            s.classList.forEach(name => {
-              s.classList.replace(name, `hljs-${name}`);
-            });
-          });
-        }
         const height = parseInt(window.getComputedStyle(element).height, 10);
         const needFold = CONFIG.fold.enable && (height > CONFIG.fold.height);
         if (!needFold && !CONFIG.copycode.enable) return;
-        let target;
-        if (CONFIG.hljswrap && CONFIG.copycode.style === 'mac') {
-          target = element;
-        } else {
-          let box = element.querySelector('.code-container');
-          if (!box) {
-            // https://github.com/next-theme/hexo-theme-next/issues/98
-            // https://github.com/next-theme/hexo-theme-next/pull/508
-            const container = element.querySelector('.table-container') || element;
-            box = document.createElement('div');
-            box.className = 'code-container';
-            container.wrap(box);
-  
-            // add "notranslate" to prevent Google Translate from translating it, which also completely messes up the layout
-            box.classList.add('notranslate');
-          }
-          target = box;
-        }
-        if (needFold && !target.classList.contains('unfold')) {
-          target.classList.add('highlight-fold');
-          target.insertAdjacentHTML('beforeend', '<div class="fold-cover"></div><div class="expand-btn"><i class="fa fa-angle-down fa-fw"></i></div>');
-          target.querySelector('.expand-btn').addEventListener('click', () => {
-            target.classList.remove('highlight-fold');
-            target.classList.add('unfold');
+        if (needFold && !element.classList.contains('unfold')) {
+          element.classList.add('highlight-fold');
+          //target.insertAdjacentHTML('beforeend', '<div class="fold-cover"></div><div class="expand-btn"><i class="fa fa-angle-down fa-fw"></i></div>');
+          element.querySelector('.expand-btn').addEventListener('click', () => {
+            element.classList.remove('highlight-fold');
+            element.classList.add('unfold');
           });
         }
         if (!inited && CONFIG.copycode.enable) {
-          this.registerCopyButton(target, element);
+          this.registerCopyButton(element, element);
         }
-      });
-    },
-  
-    wrapTableWithBox() {
-      document.querySelectorAll('table').forEach(element => {
-        const box = document.createElement('div');
-        box.className = 'table-container';
-        element.wrap(box);
       });
     },
   
@@ -279,105 +241,11 @@ HTMLElement.prototype.wrap = function (wrapper) {
       });
     },
   
-    /**
-     * Tabs tag listener (without twitter bootstrap).
-     */
-    registerTabsTag() {
-      // Binding `nav-tabs` & `tab-content` by real time permalink changing.
-      document.querySelectorAll('.tabs ul.nav-tabs .tab').forEach(element => {
-        element.addEventListener('click', event => {
-          event.preventDefault();
-          // Prevent selected tab to select again.
-          if (element.classList.contains('active')) return;
-          const nav = element.parentNode;
-          // Get the height of `tab-pane` which is activated before, and set it as the height of `tab-content` with extra margin / paddings.
-          const tabContent = nav.nextElementSibling;
-          tabContent.style.overflow = 'hidden';
-          tabContent.style.transition = 'height 1s';
-          // Comment system selection tab does not contain .active class.
-          const activeTab = tabContent.querySelector('.active') || tabContent.firstElementChild;
-          // Hight might be `auto`.
-          const prevHeight = parseInt(window.getComputedStyle(activeTab).height, 10) || 0;
-          const paddingTop = parseInt(window.getComputedStyle(activeTab).paddingTop, 10);
-          const marginBottom = parseInt(window.getComputedStyle(activeTab.firstElementChild).marginBottom, 10);
-          tabContent.style.height = prevHeight + paddingTop + marginBottom + 'px';
-          // Add & Remove active class on `nav-tabs` & `tab-content`.
-          [...nav.children].forEach(target => {
-            target.classList.toggle('active', target === element);
-          });
-          // https://stackoverflow.com/questions/20306204/using-queryselector-with-ids-that-are-numbers
-          const tActive = document.getElementById(element.querySelector('a').getAttribute('href').replace('#', ''));
-          [...tActive.parentNode.children].forEach(target => {
-            target.classList.toggle('active', target === tActive);
-          });
-          // Trigger event
-          tActive.dispatchEvent(new Event('tabs:click', {
-            bubbles: true
-          }));
-          // Get the height of `tab-pane` which is activated now.
-          const hasScrollBar = document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight);
-          const currHeight = parseInt(window.getComputedStyle(tabContent.querySelector('.active')).height, 10);
-          // Reset the height of `tab-content` and see the animation.
-          tabContent.style.height = currHeight + paddingTop + marginBottom + 'px';
-          // Change the height of `tab-content` may cause scrollbar show / disappear, which may result in the change of the `tab-pane`'s height
-          setTimeout(() => {
-            if ((document.body.scrollHeight > (window.innerHeight || document.documentElement.clientHeight)) !== hasScrollBar) {
-              tabContent.style.transition = 'height 0.3s linear';
-              // After the animation, we need reset the height of `tab-content` again.
-              const currHeightAfterScrollBarChange = parseInt(window.getComputedStyle(tabContent.querySelector('.active')).height, 10);
-              tabContent.style.height = currHeightAfterScrollBarChange + paddingTop + marginBottom + 'px';
-            }
-            // Remove all the inline styles, and let the height be adaptive again.
-            setTimeout(() => {
-              tabContent.style.transition = '';
-              tabContent.style.height = '';
-            }, 250);
-          }, 1000);
-          if (!CONFIG.stickytabs) return;
-          const offset = nav.parentNode.getBoundingClientRect().top + window.scrollY + 10;
-          window.anime({
-            targets: document.scrollingElement,
-            duration: 500,
-            easing: 'linear',
-            scrollTop: offset
-          });
-        });
-      });
-  
-      window.dispatchEvent(new Event('tabs:register'));
-    },
-  
-    registerCanIUseTag() {
-      // Get responsive height passed from iframe.
-      window.addEventListener('message', ({ data }) => {
-        if (typeof data === 'string' && data.includes('ciu_embed')) {
-          const featureID = data.split(':')[1];
-          const height = data.split(':')[2];
-          document.querySelector(`iframe[data-feature=${featureID}]`).style.height = parseInt(height, 10) + 5 + 'px';
-        }
-      }, false);
-    },
-  
     registerActiveMenuItem() {
       document.querySelectorAll('.menu-item a[href]').forEach(target => {
         const isSamePath = target.pathname === location.pathname || target.pathname === location.pathname.replace('index.html', '');
         const isSubPath = !CONFIG.root.startsWith(target.pathname) && location.pathname.startsWith(target.pathname);
         target.classList.toggle('menu-item-active', target.hostname === location.hostname && (isSamePath || isSubPath));
-      });
-    },
-  
-    registerLangSelect() {
-      const selects = document.querySelectorAll('.lang-select');
-      selects.forEach(sel => {
-        sel.value = CONFIG.page.lang;
-        sel.addEventListener('change', () => {
-          const target = sel.options[sel.selectedIndex];
-          document.querySelectorAll('.lang-select-label span').forEach(span => {
-            span.innerText = target.text;
-          });
-          // Disable Pjax to force refresh translation of menu item
-          window.location.href = target.dataset.href;
-        });
       });
     },
   
@@ -752,7 +620,6 @@ NexT.boot = {};
 NexT.boot.registerEvents = function () {
 
   NexT.utils.registerScrollPercent();
-  NexT.utils.registerCanIUseTag();
   NexT.utils.updateFooterPosition();
   NexT.utils.registerThemeToggle();
 
@@ -792,11 +659,8 @@ NexT.boot.refresh = function () {
    */
 
   CONFIG.exturl && NexT.utils.registerExtURL();
-  NexT.utils.wrapTableWithBox();
   NexT.utils.registerCodeblock();
-  NexT.utils.registerTabsTag();
   NexT.utils.registerActiveMenuItem();
-  NexT.utils.registerLangSelect();
   NexT.utils.registerSidebarTOC();
   NexT.utils.registerPostReward();
   NexT.utils.registerVideoIframe();
@@ -804,7 +668,7 @@ NexT.boot.refresh = function () {
 
 NexT.boot.refreshx = function () {
   CONFIG.prism && window.Prism.highlightAll();
-  CONFIG.mediumzoom && window.mediumZoom('.post-body :not(a) > img, .post-body > img', {
+  CONFIG.mediumzoom && window.mediumZoom('.post-body :not(a) > img:not(.inline)', {
     background: 'var(--content-bg-color)'
   });
   CONFIG.lazyload && window.lozad('[data-src]').observe();
