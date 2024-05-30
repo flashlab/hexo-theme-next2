@@ -34,9 +34,10 @@
   i[class^='fa'] {
     margin-right: 5px;
   }
-
-  .badge {
-    badge();
+  if (hexo-config('menu_settings.badges')) {
+    .badge {
+      @extend .item-badge;
+    }
   }
 }
 

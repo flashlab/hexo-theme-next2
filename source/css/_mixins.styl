@@ -233,7 +233,7 @@ site-nav-hide-by-default() {
   transition-property: height, visibility;
   visibility: hidden;
 
-  body:not(.site-nav-on) & .animated {
+  & .animated {
     animation: none;
   }
 
@@ -285,7 +285,7 @@ menu-item-row() {
   }
 }
 
-badge() {
+.item-badge {
   background: $badge-background;
   border-radius: $badge-border-radius;
   color: $badge-color;

@@ -32,20 +32,22 @@
     padding: 0 10px;
   }
 
-  .sidebar .sidebar-button {
-    border-bottom: 1px dotted $grey-light;
-    border-top: 1px dotted $grey-light;
+  if (hexo-config('chat.enable')) {
+    .sidebar .sidebar-button {
+      border-bottom: 1px dotted $grey-light;
+      border-top: 1px dotted $grey-light;
 
-    button {
-      border: 0;
-      color: $orange;
-      display: block;
-      width: 100%;
-
-      &:hover {
-        background: none;
+      button {
         border: 0;
-        color: darken($orange, 20%);
+        color: $orange;
+        display: block;
+        width: 100%;
+
+        &:hover {
+          background: none;
+          border: 0;
+          color: darken($orange, 20%);
+        }
       }
     }
   }
@@ -71,12 +73,13 @@
       }
     }
   }
-
-  .links-of-blogroll-item {
-    if (hexo-config('links_settings.layout') == 'inline') {
-      display: inline-block;
-      max-width: 100%;
-      sidebar-inline-links-item();
+  if (hexo-config('links')) {
+    .links-of-blogroll-item {
+      if (hexo-config('links_settings.layout') == 'inline') {
+        display: inline-block;
+        max-width: 100%;
+        sidebar-inline-links-item();
+      }
     }
   }
 
