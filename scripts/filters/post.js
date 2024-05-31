@@ -14,7 +14,7 @@ hexo.extend.filter.register('marked:renderer', renderer => {
   renderer.image = (...args) => {
     // ![alt](/filename.webp?size=widthxheight "title|inline")
     // const href = args[0], title = args[1], alt = args[2];
-    if (!/^(#|\/\/|http(s)?:)/.test(args[0]) && config.marked.prependRoot) {
+    if (!/^(#|\/\/|http(s)?:)/.test(args[0])) {
       // skip postPath option
       args[0] = config.pic_cdn_url + args[0]
     }

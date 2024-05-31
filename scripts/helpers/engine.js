@@ -73,9 +73,7 @@ hexo.extend.helper.register('next_pre', function() {
 });
 
 hexo.extend.helper.register('post_gallery', function(photos) {
-  if (!photos || !photos.length) return '';
-  const content = photos.map(photo => {
-    let purl = this.url_for(photo)
+  const genImg = (purl) => {
     let out = ''
     const arrurl = purl.split('?')
     if (arrurl.length > 1) {
@@ -89,14 +87,31 @@ hexo.extend.helper.register('post_gallery', function(photos) {
       } catch  { }
     }
     if (this.config.marked.lazyload) out += ' loading="lazy"'
+    return `<img src="${!/^(#|\/\/|http(s)?:)/.test(purl) && (this.config.pic_cdn_url ?? '')}${purl}"${out} itemprop="contentUrl">`
+  }
+  if (!photos || !photos.length) return '';
+  if (photos.length == 1) {
     return `
-    <div class="post-gallery-image">
-      <img src="${!/^(#|\/\/|http(s)?:)/.test(purl) && (this.config.pic_cdn_url ?? '')}${purl}"${out} itemprop="contentUrl">
+    <div class="post-gallery">
+    ${genImg(this.url_for(photos[0]))}
     </div>`
-  }).join('');
-  return `<div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
-    ${content}
-    </div>`;
+  } else {
+    const content = photos.map(photo => {
+      return `
+      <div class="post-gallery-image">
+        ${genImg(this.url_for(photo))}
+      </div>`
+    }).join('');
+    return `<div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+      ${content}
+      </div>`;
+  }
+});
+
+hexo.extend.helper.register('post_banner', function(raw) {
+  const rawlink = /!\[[^\]]*\]\(([^\s\)]+)[\s\)]/.exec(raw);
+  if (rawlink === null) return '';
+  return [rawlink[1]]
 });
 
 hexo.extend.helper.register('post_edit', function(src) {
