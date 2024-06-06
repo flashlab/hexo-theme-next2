@@ -13,7 +13,7 @@
     {%- if config.archive_dir != '/' and site.posts.length > 0 %}
       <div class="site-state-item site-state-posts">
         {%- set archive_dir = theme.menu.archives.split('||')[0] | trim if theme.menu.archives else config.archive_dir + '/' %}
-        <a href="{{ url_for(archive_dir) }}">
+        <a href="{{ i18n_path(page.lang, {lang: page.lang, path: archive_dir}) }}">
           <span class="site-state-item-count">{{ site.posts.length }}</span>
           <span class="site-state-item-name">{{ __('state.posts') }}</span>
         </a>
@@ -26,7 +26,7 @@
       <div class="site-state-item site-state-categories">
         {%- set category_dir = theme.menu.categories.split('||')[0] | trim if theme.menu.categories else config.category_dir + '/' %}
         {%- if hasCategoriesPage %}
-          <a href="{{ url_for(category_dir) }}">
+          <a href="{{ i18n_path(page.lang, {lang: page.lang, path: category_dir}) }}">
         {%- endif %}
         <span class="site-state-item-count">{{ site.categories.length }}</span>
         <span class="site-state-item-name">{{ __('state.categories') }}</span>
@@ -40,7 +40,7 @@
       <div class="site-state-item site-state-tags">
         {%- set tag_dir = theme.menu.tags.split('||')[0] | trim if theme.menu.tags else config.tag_dir + '/' %}
         {%- if hasTagsPage %}
-          <a href="{{ url_for(tag_dir) }}">
+          <a href="{{ i18n_path(page.lang, {lang: page.lang, path: tag_dir}) }}">
         {%- endif %}
         <span class="site-state-item-count">{{ site.tags.length }}</span>
         <span class="site-state-item-name">{{ __('state.tags') }}</span>

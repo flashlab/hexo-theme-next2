@@ -1,12 +1,12 @@
 <div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="{{ __('accessibility.nav_toggle') }}" role="button">
+    <a class="toggle" aria-label="{{ __('accessibility.nav_toggle') }}" role="button">
       {%- if theme.menu %}
         <span class="toggle-line"></span>
         <span class="toggle-line"></span>
         <span class="toggle-line"></span>
       {%- endif %}
-    </div>
+    </a>
   </div>
 
   <div class="site-meta">
@@ -14,7 +14,7 @@
       <img class="custom-logo-image" src="{{ url_for(theme.custom_logo) }}" alt="{{ title }}">
     {%- endif %}
 
-    <a href="{{ config.root }}" class="brand" rel="start">
+    <a href="{{ i18n_path(page.lang, {lang: page.lang, path: ''}) }}" class="brand" rel="start">
       <i class="logo-line"></i>
       <{% if is_home() or is_archive() %}h1{% else %}p{% endif %} class="site-title">{{ title }}</{% if is_home() or is_archive() %}h1{% else %}p{% endif %}>
       <i class="logo-line"></i>
@@ -28,8 +28,8 @@
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle theme-toggle" aria-label="{{ __('menu.darkmode') }}" role="button">
-      <i class="fa fa-moon fa-fw fa-lg"></i>
-    </div>
+    <a class="toggle theme-toggle" aria-label="{{ __('menu.darkmode') }}" role="button">
+      <svg role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </a>
   </div>
 </div>

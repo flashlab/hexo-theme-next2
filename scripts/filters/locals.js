@@ -18,7 +18,7 @@ hexo.extend.filter.register('template_locals', locals => {
   locals.languages = [...i18n.languages];
   locals.languages.splice(locals.languages.indexOf('default'), 1);
   // See https://github.com/hexojs/hexo/pull/4614
-  page.lang = page.lang || page.language;
+  page.lang = page.lang ?? page.language ?? locals.languages[0];
   // Creative Commons
   locals.ccURL = 'https://creativecommons.org/' + (theme.creative_commons.license === 'cc-zero' ? 'publicdomain/zero/1.0/' : 'licenses/' + theme.creative_commons.license + '/4.0/') + (theme.creative_commons.language || '');
   // PJAX

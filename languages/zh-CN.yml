@@ -15,7 +15,6 @@ menu:
   schedule: 日程表
   sitemap: 站点地图
   commonweal: 公益 404
-  darkmode: 明暗切换
 sidebar:
   overview: 站点概览
   toc: 文章目录
@@ -38,7 +37,7 @@ post:
     post_author: 原作者
     post_link: 原文链接
     license_title: 版权声明
-    license_content: "除特别声明外，均采用 %s 许可协议，转载请注明出处！"
+    license_content: "本博客所有文章除特别声明外，均采用 %s 许可协议。转载请注明出处！"
     license_content_reprint: "本文章为转载文章，已获转载许可。转载请注明出处！"
 footer:
   powered: "由 %s 强力驱动"

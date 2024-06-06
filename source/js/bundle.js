@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* pjax.js */
 const pjax = new Pjax({
+  elements: "a[href]:not(.lang-toggle), form[action]",
   selectors: [
     'head title',
     'meta[property="og:title"]',
@@ -61,7 +62,7 @@ const pjax = new Pjax({
     // Precede .main-inner to prevent placeholder TOC changes asap
     '.post-toc-wrap',
     '.main-inner',
-    '.languages',
+    '.lang-toggle',
     '.pjax'
   ],
   switches: {
@@ -122,7 +123,7 @@ document.addEventListener('page:loaded', () => {
         'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
         'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
         'data-theme'            : CONFIG.giscus.theme || document.body.classList.contains('darkmode') ? 'dark' : 'light',
-        'data-lang'             : CONFIG.giscus.lang,
+        'data-lang'             : CONFIG.giscus.lang || CONFIG.page.lang,
         'data-input-position'   : CONFIG.giscus.input_position,
         'data-loading'          : CONFIG.giscus.loading
       },
