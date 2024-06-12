@@ -668,6 +668,10 @@ NexT.boot.refreshx = function () {
   CONFIG.prism && window.Prism.highlightAll();
   CONFIG.mediumzoom && window.mediumZoom('.post-body :not(a) > img:not(.inline)', {
     background: 'var(--content-bg-color)'
+  }).on('open', event => {
+    event.target.style.height="auto";
+  }).on('opened', event => {
+    event.target.style.height=null;
   });
   CONFIG.lazyload && window.lozad('[data-src]').observe();
   CONFIG.pangu && window.pangu.spacingPage();

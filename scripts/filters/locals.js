@@ -3,6 +3,7 @@
 'use strict';
 
 const keys = ['toc', 'reward_settings', 'quicklink'];
+const { stripHTML } = require('hexo-util');
 
 hexo.extend.filter.register('template_locals', locals => {
   const { config } = hexo;
@@ -33,5 +34,9 @@ hexo.extend.filter.register('template_locals', locals => {
   }
   if (page.archive) {
     page.quicklink.enable = theme.quicklink.archive;
+  }
+  // empty excerpt if only consists with html tags
+  if (page.excerpt && !stripHTML(page.excerpt).trim().replace(/\n/g, ' ')) {
+    page.excerpt = '';
   }
 });

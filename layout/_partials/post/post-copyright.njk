@@ -19,16 +19,16 @@
         <div>{{- author }}</div>
       {%- endif %}
     </div>
-    {%- if post.date %}
+    {%- if page.date %}
       <div>
         <div>{{ __('post.posted') }}</div>
-        <div>{{ date(post.date) }}</div>
+        <div>{{ date(page.date) }}</div>
       </div>
     {%- endif %}
-    {%- if post.edited %}
+    {%- if page.edited %}
       <div>
         <div>{{ __('post.edited') }}</div>
-        <div>{{ date(post.edited) }}</div>
+        <div>{{ date(page.edited) }}</div>
       </div>
     {%- endif %}
     {%- if page.post_link %}
@@ -38,12 +38,12 @@
       </div>
     {%- endif %}
     <div>
-        <div>许可协议</div>
+        <div>{{ __('post.copyright.title') }}</div>
         <div>
           {%- if page.author %}
-            原作许可协议
+            {{- page.license if page.license else __('post.copyright.origin') }}
           {%- elif post.cc_strict %}
-            禁止转载引用
+            {{- __('post.copyright.cc_strict') }}
           {% else %}
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">BY-NC-SA</a>
           {%- endif %}
@@ -52,11 +52,11 @@
   </li>
   <li class="post-copyright-license">
     {%- if page.author %}
-      转载或引用本文时，请遵守原作许可协议！
+      {{- __('post.copyright.reprint') }}
     {%- elif post.cc_strict %}
-      如需转载或引用本文，请先获得作者授权！
+      {{- __('post.copyright.author_cc_strict') }}
     {%- else %}
-      {{- __('post.copyright.license_content', next_url(ccURL, ccIcon + ccText)) }}
+      {{- __('post.copyright.content', next_url(ccURL, ccIcon + ccText)) }}
     {%- endif %}
   </li>
 </ul>
