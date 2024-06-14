@@ -494,6 +494,19 @@ document.addEventListener('DOMContentLoaded', () => {
     ).replace(/,/g, '') + '\n---'
     open(`https://github.com/flashlab/flashlab.github.io/new/main/source/_posts?filename=miao.md&value=${encodeURIComponent(values)}`)
   });
+
+  /* third-party/topbar.js */
+  if(window.topbar) topbar.hide()
+});
+
+document.addEventListener('page:loaded', () => {
+  const tar = document.querySelector(".blockquote-center textarea");
+  if (tar) {
+    clearTimeout(window.typID);
+    const text = tar.textContent.split(/\r?\n/);
+    tar.insertAdjacentHTML('afterEnd', '<i class="fa fa-caret-up"></i>')
+    typing(tar, text, text[0].length, 0, 0, tar.hasAttribute('loop'))
+  }
   // Disqus button
   document.querySelector('a[title="Disqus"]').addEventListener('click', (e) => {
     e.target.style="pointer-events: none;"
@@ -516,17 +529,4 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   })
-
-  /* third-party/topbar.js */
-  if(window.topbar) topbar.hide()
-});
-
-document.addEventListener('page:loaded', () => {
-  const tar = document.querySelector(".blockquote-center textarea");
-  if (tar) {
-    clearTimeout(window.typID);
-    const text = tar.textContent.split(/\r?\n/);
-    tar.insertAdjacentHTML('afterEnd', '<i class="fa fa-caret-up"></i>')
-    typing(tar, text, text[0].length, 0, 0, tar.hasAttribute('loop'))
-  }
 })

@@ -12,7 +12,7 @@ hexo.extend.filter.register('theme_inject', injects => {
   injects.comment.raw('twikoo', `
 {%- if page.comments %}
   <div class="reward-container">
-    <a class="btn" href="javascript:;" title="Disqus"><i class="fa fa-comment-dots fa-fw fa-lg"></i>显示 Disqus 评论</a><sub> (非国内网络)</sub>
+    <a class="btn" href="javascript:;" title="Disqus"><i class="fa fa-comment-dots fa-fw fa-lg"></i>{{ __('reward.show_disqus') }}</a>{%- if page.lang == 'zh-CN' %}<sub> (非国内网络)</sub>{%- endif %}
   </div>
   <div id="disqus_thread"></div>
   <div class="comments twikoo-container">
