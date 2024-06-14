@@ -479,6 +479,7 @@ window.typing = function typing(el, tl, str_length, index, text_pos, loop=false)
     }, 50); // speed
 };
 document.addEventListener('DOMContentLoaded', () => {
+  // footer pen icon
   document.querySelector('.with-love').addEventListener('click', () => {
     const values = 'title: 我是标题\nauthor: Flora\ntags: [生活]\ncategories: [原创, 喵的日记]\ndate: ' + new Date().toLocaleString(
       'en-CA', {
@@ -493,6 +494,28 @@ document.addEventListener('DOMContentLoaded', () => {
     ).replace(/,/g, '') + '\n---'
     open(`https://github.com/flashlab/flashlab.github.io/new/main/source/_posts?filename=miao.md&value=${encodeURIComponent(values)}`)
   });
+  // Disqus button
+  document.querySelector('a[title="Disqus"]').addEventListener('click', (e) => {
+    e.target.style="pointer-events: none;"
+    setTimeout(() => {
+      e.target.style="pointer-events: auto;"
+    }, "10000");
+    if (!window.disqus_config) window.disqus_config = function() {
+      this.page.url = CONFIG.page.permalink;
+      this.page.identifier = CONFIG.page.path;
+      this.page.title = CONFIG.page.title;
+    };
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: window.disqus_config
+      });
+    } else {
+      NexT.utils.getScript(`https://flashlab.disqus.com/embed.js`, {
+        attributes: { dataset: { timestamp: '' + +new Date() } }
+      });
+    }
+  })
 
   /* third-party/topbar.js */
   if(window.topbar) topbar.hide()
