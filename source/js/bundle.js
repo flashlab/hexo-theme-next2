@@ -107,28 +107,34 @@ document.addEventListener('pjax:success', () => {
 
 /* third-party/giscus.js */
 document.addEventListener('page:loaded', () => {
-  if (!CONFIG.page.comments) return;
+  if (!CONFIG.page.comments || !CONFIG.twikoo) return;
+  CONFIG.twikoo.path = CONFIG.page.path
+  CONFIG.twikoo.lang = CONFIG.page.lang
 
-  NexT.utils.loadComments('.giscus-container')
-    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
-      attributes: {
-        async                   : true,
-        crossOrigin             : 'anonymous',
-        'data-repo'             : CONFIG.giscus.repo,
-        'data-repo-id'          : CONFIG.giscus.repo_id,
-        'data-category'         : CONFIG.giscus.category,
-        'data-category-id'      : CONFIG.giscus.category_id,
-        'data-mapping'          : CONFIG.giscus.mapping,
-        'data-strict'           : CONFIG.giscus.strict,
-        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
-        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
-        'data-theme'            : CONFIG.giscus.theme || document.body.classList.contains('darkmode') ? 'dark' : 'light',
-        'data-lang'             : CONFIG.giscus.lang || CONFIG.page.lang,
-        'data-input-position'   : CONFIG.giscus.input_position,
-        'data-loading'          : CONFIG.giscus.loading
-      },
-      parentNode: document.querySelector('.giscus-container')
-    }));
+  // NexT.utils.loadComments('.giscus-container')
+  //   .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+  //     attributes: {
+  //       async                   : true,
+  //       crossOrigin             : 'anonymous',
+  //       'data-repo'             : CONFIG.giscus.repo,
+  //       'data-repo-id'          : CONFIG.giscus.repo_id,
+  //       'data-category'         : CONFIG.giscus.category,
+  //       'data-category-id'      : CONFIG.giscus.category_id,
+  //       'data-mapping'          : CONFIG.giscus.mapping,
+  //       'data-strict'           : CONFIG.giscus.strict,
+  //       'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+  //       'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+  //       'data-theme'            : CONFIG.giscus.theme || document.body.classList.contains('darkmode') ? 'dark' : 'light',
+  //       'data-lang'             : CONFIG.giscus.lang || CONFIG.page.lang,
+  //       'data-input-position'   : CONFIG.giscus.input_position,
+  //       'data-loading'          : CONFIG.giscus.loading
+  //     },
+  //     parentNode: document.querySelector('.giscus-container')
+  //   }));
+
+  NexT.utils.loadComments(CONFIG.twikoo.el)
+    .then(() => NexT.utils.getScript(CONFIG.twikoo.jsUrl || 'https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js', { condition: window.twikoo }))
+    .then(() => {twikoo.init(CONFIG.twikoo)});
 });
 
 /* third-party/local-search.js */

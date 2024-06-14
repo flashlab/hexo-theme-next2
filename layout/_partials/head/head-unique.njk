@@ -2,6 +2,9 @@
 {%- if theme.giscus.enable %}
   {{ partial('_third-party/comments/giscus.njk', {}, {cache: theme.cache.enable}) }}
 {%- endif %}
+{%- if theme.twikoo.enable %}
+  {{ partial('_third-party/comments/twikoo.njk', {}, {cache: theme.cache.enable}) }}
+{%- endif %}
 {%- if not theme.bundle %}
   {{- next_js('config.js') }}
   {{ next_font() }}
