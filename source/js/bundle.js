@@ -500,15 +500,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('page:loaded', () => {
-  const tar = document.querySelector(".blockquote-center textarea");
-  if (tar) {
-    clearTimeout(window.typID);
-    const text = tar.textContent.split(/\r?\n/);
-    tar.insertAdjacentHTML('afterEnd', '<i class="fa fa-caret-up"></i>')
-    typing(tar, text, text[0].length, 0, 0, tar.hasAttribute('loop'))
+  const typ = document.querySelector(".blockquote-center textarea")
+  if (typ) {
+    clearTimeout(window.typID)
+    const text = typ.textContent.split(/\r?\n/)
+    typ.insertAdjacentHTML('afterEnd', '<i class="fa fa-caret-up"></i>')
+    typing(typ, text, text[0].length, 0, 0, typ.hasAttribute('loop'))
   }
   // Disqus button
-  document.querySelector('a[title="Disqus"]').addEventListener('click', (e) => {
+  const disq = document.querySelector('a[title="Disqus"]')
+  if (disq) disq.addEventListener('click', (e) => {
     e.target.style="pointer-events: none;"
     setTimeout(() => {
       e.target.style="pointer-events: auto;"
