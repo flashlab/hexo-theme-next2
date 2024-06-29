@@ -27,13 +27,12 @@ if ($scheme != 'Mist') {
   }
 }
 
-.site-title {
-  font-family: $font-family-logo;
+.site-title
+  if $font-family-logo is defined
+    font-family: $font-family-logo;
   font-size: $font-size-title;
-  font-weight: normal;
   line-height: 1.5;
   margin: 0;
-}
 
 .site-subtitle {
   color: $subtitle-color;
