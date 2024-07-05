@@ -221,7 +221,8 @@ NexT.utils = {
         const contentHeight = document.body.scrollHeight - window.innerHeight;
         const scrollPercent = contentHeight > 0 ? Math.min(100 * window.scrollY / contentHeight, 100) : 0;
         if (backToTop) {
-          backToTop.classList.toggle('back-to-top-on', Math.round(scrollPercent) >= 5);
+          if (Math.round(scrollPercent) >= 5 && !backToTop.classList.contains('back-to-top-on')) backToTop.classList.add('back-to-top-on')
+          else if (Math.round(scrollPercent) < 5 && backToTop.classList.contains('back-to-top-on')) backToTop.classList.remove('back-to-top-on')
           backToTop.querySelector('span').innerText = Math.round(scrollPercent) + '%';
         }
         if (readingProgressBar) {
@@ -376,19 +377,6 @@ NexT.utils = {
     panelContainer.style.setProperty('--active-panel-height', `${panelHeights[index]}px`);
 
     sidebar.classList.replace(activeClassNames[1 - index], activeClassNames[index]);
-  },
-
-  updateFooterPosition: function() {
-    if (CONFIG.scheme === 'Pisces' || CONFIG.scheme === 'Gemini') return;
-    function updateFooterPosition() {
-      const footer = document.querySelector('.footer');
-      const containerHeight = document.querySelector('.main').offsetHeight + footer.offsetHeight;
-      footer.classList.toggle('footer-fixed', containerHeight <= window.innerHeight);
-    }
-
-    updateFooterPosition();
-    window.addEventListener('resize', updateFooterPosition);
-    window.addEventListener('scroll', updateFooterPosition, { passive: true });
   },
 
   getScript(src, options = {}, legacyCondition) {
@@ -618,7 +606,6 @@ NexT.boot = {};
 NexT.boot.registerEvents = function () {
 
   NexT.utils.registerScrollPercent();
-  NexT.utils.updateFooterPosition();
   NexT.utils.registerThemeToggle();
 
   // Mobile top menu bar.

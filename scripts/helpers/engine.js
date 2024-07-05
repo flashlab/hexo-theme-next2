@@ -141,10 +141,11 @@ hexo.extend.helper.register('gitalk_md5', function(path) {
 hexo.extend.helper.register('i18n_path', function(language, page) {
   const { path, lang } = page ?? this.page;
   const base = path.startsWith(lang) ? path.slice(lang.length + 1) : path;
-  let newurl = `${this.languages.indexOf(language) === 0 ? '' : '/' + language}/`
+  let newurl = this.languages.indexOf(language) === 0 ? '' : language + '/'
   // fallback to root page if page not exists 
   if (!page) {
     const routerlist = hexo.route.list();
+    // console.dir(routerlist, {'maxArrayLength': null})
     const fullurl = `${newurl}${base}${base.endsWith('/') ? 'index.html' : ''}`
     if (routerlist.includes(fullurl)) newurl += base
   } else {
