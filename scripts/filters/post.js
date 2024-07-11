@@ -53,8 +53,6 @@ hexo.extend.filter.register('marked:renderer', renderer => {
   };
   if (theme.config.exturl) {
     const siteHost = parse(config.url).hostname || config.url;
-    // External URL icon
-    const exturlIcon = theme.config.exturl_icon ? '<i class="fa fa-external-link-alt"></i>' : '';
     const originalUrlRender = renderer.link;
     renderer.link = (...args) => {
       let content = originalUrlRender.apply(renderer, args);
@@ -65,6 +63,12 @@ hexo.extend.filter.register('marked:renderer', renderer => {
         // Exit if the url has same host with `config.url`, which means it's an internal link.
         const link = parse(href);
         if (!link.protocol || link.hostname === siteHost) return match;
+
+        // External URL icon
+        let iconClass = 'fa fa-external-link-square';
+        if (/wikipedia\.org/i.test(link.hostname)) iconClass = 'fab fa-wikipedia-w fa-2xs'
+        if (/github\.com/i.test(link.hostname)) iconClass = 'fab fa-github'
+        const exturlIcon = theme.config.exturl_icon ? `<sup class="${iconClass}"></sup>` : '';
   
         // Return encrypted URL with title.
         const title = match.match(/title="([^"]+)"/);
