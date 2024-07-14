@@ -540,6 +540,8 @@ document.addEventListener('page:loaded', () => {
     container.classList.remove('cover-layer')
     container.appendChild(window.swfplayer);
     window.currentSwf = "https://pic.313159.xyz/Binary_Clock.swf"
-    window.swfplayer.load(window.currentSwf)
+    window.swfplayer.load(window.currentSwf).then(() => {
+      document.querySelector('.ctl-layer .ctl-title').textContent = "二进制时钟"
+    }).catch((e) => {document.querySelector('.ctl-layer .ctl-title').textContent = "加载失败：" + e})
   });
 })
