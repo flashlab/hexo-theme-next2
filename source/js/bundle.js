@@ -530,4 +530,16 @@ document.addEventListener('page:loaded', () => {
       });
     }
   })
+  // flash
+  const container = document.getElementById('swfContainer');
+  if (container) NexT.utils.getScript('https://cdnjs.cloudflare.com/ajax/libs/ruffle-rs/0.1.0-nightly.2024.7.13/ruffle.min.js', {
+    condition: window.RufflePlayer
+  }).then(() => {
+    const ruffle = window.RufflePlayer.newest();
+    window.swfplayer = ruffle.createPlayer();
+    container.classList.remove('cover-layer')
+    container.appendChild(window.swfplayer);
+    window.currentSwf = "https://pic.313159.xyz/Binary_Clock.swf"
+    window.swfplayer.load(window.currentSwf)
+  });
 })
