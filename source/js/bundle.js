@@ -531,17 +531,24 @@ document.addEventListener('page:loaded', () => {
     }
   })
   // flash
-  const container = document.getElementById('swfContainer');
-  if (container) NexT.utils.getScript('https://cdnjs.cloudflare.com/ajax/libs/ruffle-rs/0.1.0-nightly.2024.7.13/ruffle.min.js', {
-    condition: window.RufflePlayer
-  }).then(() => {
-    const ruffle = window.RufflePlayer.newest();
-    window.swfplayer = ruffle.createPlayer();
-    container.classList.remove('cover-layer')
-    container.appendChild(window.swfplayer);
-    window.currentSwf = "https://pic.313159.xyz/Binary_Clock.swf"
-    window.swfplayer.load(window.currentSwf).then(() => {
-      document.querySelector('.ctl-layer .ctl-title').textContent = "二进制时钟"
-    }).catch((e) => {document.querySelector('.ctl-layer .ctl-title').textContent = "加载失败：" + e})
-  });
+  const swfs = document.querySelectorAll('.swfContainer')
+  if (swfs.length > 0) {
+    NexT.utils.getScript('https://cdnjs.cloudflare.com/ajax/libs/ruffle-rs/0.1.0-nightly.2024.7.13/ruffle.min.js', {
+      condition: window.RufflePlayer
+    }).then(() => {
+      swfs.forEach(ele => {
+        const swfUrl = ele.dataset.url.startsWith('http') ? ele.dataset.url : 'https://pic.313159.xyz/' + ele.dataset.url
+        const swfTitle = ele.dataset.tit
+        const ruffle = window.RufflePlayer.newest()
+        window.swfplayer = ruffle.createPlayer()
+        ele.classList.remove('cover-layer')
+        ele.appendChild(window.swfplayer)
+        window.currentSwf = swfUrl
+        const ctlTitle = document.querySelector('.ctl-layer .ctl-title')
+        window.swfplayer.load(swfUrl).then(() => {
+          if (ctlTitle) ctlTitle.textContent = "二进制时钟"
+        }).catch((e) => {if (ctlTitle) ctlTitle.textContent = "加载失败：" + e})
+      });
+    })
+  }
 })
