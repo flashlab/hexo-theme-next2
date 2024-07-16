@@ -540,13 +540,15 @@ document.addEventListener('page:loaded', () => {
         const swfUrl = ele.dataset.url.startsWith('http') ? ele.dataset.url : 'https://pic.313159.xyz/' + ele.dataset.url
         const swfTitle = ele.dataset.tit
         const ruffle = window.RufflePlayer.newest()
+        const ruffleVer = window.RufflePlayer.sources.local.version
         window.swfplayer = ruffle.createPlayer()
         ele.classList.remove('cover-layer')
         ele.appendChild(window.swfplayer)
         window.currentSwf = swfUrl
+        document.querySelectorAll('.ruffleVer').forEach(el => {el.textContent = ' v' + ruffleVer})
         const ctlTitle = document.querySelector('.ctl-layer .ctl-title')
         window.swfplayer.load(swfUrl).then(() => {
-          if (ctlTitle) ctlTitle.textContent = "二进制时钟"
+          if (ctlTitle) ctlTitle.textContent = swfTitle
         }).catch((e) => {if (ctlTitle) ctlTitle.textContent = "加载失败：" + e})
       });
     })
