@@ -451,7 +451,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-
 /* custom */
 window.typing = function typing(el, tl, str_length, index, text_pos, loop=false) {
   let contents = '';
@@ -466,15 +465,15 @@ window.typing = function typing(el, tl, str_length, index, text_pos, loop=false)
     index++;
     if (index != tl.length) {
       str_length = tl[index].length;
-      window.typID = setTimeout(() => {
+      el.datset.tid = setTimeout(() => {
         typing(el, tl, str_length, index, text_pos, loop);
       }, 1500);
-    } else if (loop) window.typID = setTimeout(() => {
+    } else if (loop) el.datset.tid = setTimeout(() => {
       typing(el, tl, tl[0].length, 0, 0, true);
     }, 1500);
   }
   else
-    window.typID = setTimeout(() => {
+  el.datset.tid = setTimeout(() => {
       typing(el, tl, str_length, index, text_pos, loop);
     }, 50); // speed
 };
@@ -500,13 +499,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('page:loaded', () => {
-  const typ = document.querySelector(".blockquote-center textarea")
-  if (typ) {
-    clearTimeout(window.typID)
+  // typings
+  document.querySelectorAll(".blockquote-center textarea").forEach(typ => {
+    clearTimeout(typ.dataset.tid)
     const text = typ.textContent.split(/\r?\n/)
     typ.insertAdjacentHTML('afterEnd', '<i class="fa fa-caret-up"></i>')
     typing(typ, text, text[0].length, 0, 0, typ.hasAttribute('loop'))
-  }
+  });
   // Disqus button
   const disq = document.querySelector('a[title="Disqus"]')
   if (disq) disq.addEventListener('click', (e) => {
@@ -531,26 +530,39 @@ document.addEventListener('page:loaded', () => {
     }
   })
   // flash
-  const swfs = document.querySelectorAll('.swfContainer')
-  if (swfs.length > 0) {
-    NexT.utils.getScript('https://cdnjs.cloudflare.com/ajax/libs/ruffle-rs/0.1.0-nightly.2024.7.13/ruffle.min.js', {
-      condition: window.RufflePlayer
-    }).then(() => {
-      swfs.forEach(ele => {
-        const swfUrl = ele.dataset.url.startsWith('http') ? ele.dataset.url : 'https://pic.313159.xyz/' + ele.dataset.url
-        const swfTitle = ele.dataset.tit
-        const ruffle = window.RufflePlayer.newest()
+  if (!window.Flash) window.Flash = {
+    loadSwf(ele, player) {
+      const swfUrl = ele.dataset.url.includes('http') ? ele.dataset.url : 'https://pic.313159.xyz/' + ele.dataset.url
+      const swfTitle = ele.dataset.tit
+      const swfplayer = player ?? ele.querySelector('ruffle-player')
+      let res = swfTitle
+      if (swfplayer) swfplayer.load(swfUrl).then(() => {
+      }).catch((e) => {res = "加载失败：" + e})
+      ele.querySelectorAll('.ctl-title').forEach(el => {el.textContent = res})
+    },
+    fullScr(ele) {
+      const swfplayer = ele.querySelector('ruffle-player')
+      if (swfplayer) swfplayer.enterFullscreen()
+    },
+    async loadSwfPlayer() {
+      const swfs = document.querySelectorAll('.swfWrapper')
+      if (swfs.length == 0) return
+      const metaJ = await NexT.utils.getFetch('https://api.cdnjs.com/libraries/ruffle-rs?fields=latest,version&search_fields=name')
+      NexT.utils.getScript(metaJ.latest ?? 'https://cdnjs.cloudflare.com/ajax/libs/ruffle-rs/0.1.0-nightly.2024.7.19/ruffle.js', {
+        condition: window.RufflePlayer
+      }).then(() => {
         const ruffleVer = window.RufflePlayer.sources.local.version
-        window.swfplayer = ruffle.createPlayer()
-        ele.classList.remove('cover-layer')
-        ele.appendChild(window.swfplayer)
-        window.currentSwf = swfUrl
-        document.querySelectorAll('.ruffleVer').forEach(el => {el.textContent = ' v' + ruffleVer})
-        const ctlTitle = document.querySelector('.ctl-layer .ctl-title')
-        window.swfplayer.load(swfUrl).then(() => {
-          if (ctlTitle) ctlTitle.textContent = swfTitle
-        }).catch((e) => {if (ctlTitle) ctlTitle.textContent = "加载失败：" + e})
-      });
-    })
+        const ruffle = window.RufflePlayer.newest()
+        swfs.forEach(ele => {
+          const swfContainer = ele.querySelector('.swfContainer')
+          ele.querySelectorAll('.ruffleVer').forEach(el => {el.textContent = ' v' + ruffleVer})
+          swfContainer.classList.remove('cover-layer')
+          swfContainer.querySelectorAll('ruffle-player').forEach(el => {swfContainer.removeChild(el)})
+          //swfContainer.appendChild(ruffle.createPlayer())
+          this.loadSwf(ele, swfContainer.appendChild(ruffle.createPlayer()))
+        })
+      })
+    }
   }
+  Flash.loadSwfPlayer()
 })

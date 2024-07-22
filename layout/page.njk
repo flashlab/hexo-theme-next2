@@ -22,7 +22,7 @@
     {##################}
     {### PAGE BLOCK ###}
     {##################}
-    <div class="post-block" lang="{{ page.lang }}">
+    <div class="post-block{% if page.motion === false %} no-motion{% endif %}" lang="{{ page.lang }}">
       {%- if page.header !== false %}
         {%- include '_partials/page/page-header.njk' -%}
       {%- endif %}

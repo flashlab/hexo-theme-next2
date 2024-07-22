@@ -81,7 +81,7 @@ HTMLElement.prototype.wrap = function (wrapper) {
   );
 
   if (document.readyState != 'complete') {
-    document.addEventListener('readystatechange', onPageLoaded, { once: true });
+    document.addEventListener('DOMContentLoaded', onPageLoaded, { once: true });
   } else {
     onPageLoaded();
   }
@@ -451,6 +451,19 @@ NexT.utils = {
     });
   },
 
+  async getFetch(url) {
+    let res = {}
+    if (window.topbar) topbar.show()
+    try {
+      const response = await fetch(url)
+      if (response.ok) res = await response.json()
+    } catch ({ name, message }) {
+      console.error(name, message)
+    }
+    if (window.topbar) topbar.hide()
+    return res
+  },
+
   debounce(func, wait) {
     let timeout;
     return function(...args) {
@@ -559,7 +572,7 @@ NexT.motion.middleWares = {
       });
     }
 
-    document.querySelectorAll('.post-block').forEach(targets => {
+    document.querySelectorAll('.post-block:not(.no-motion)').forEach(targets => {
       sequence.push({
         targets,
         complete: () => targets.classList.add('animated', post_block),
