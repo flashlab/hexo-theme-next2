@@ -546,21 +546,24 @@ document.addEventListener('page:loaded', () => {
     },
     async loadSwfPlayer() {
       const swfs = document.querySelectorAll('.swfWrapper')
-      if (swfs.length == 0) return
+      const swfe = document.querySelectorAll('embed[src$=".swf"]')
+      if (swfs.length == 0 && swfe.length == 0) return
       const metaJ = await NexT.utils.getFetch('https://api.cdnjs.com/libraries/ruffle-rs?fields=latest,version&search_fields=name')
       NexT.utils.getScript(metaJ.latest ?? 'https://cdnjs.cloudflare.com/ajax/libs/ruffle-rs/0.1.0-nightly.2024.7.19/ruffle.js', {
         condition: window.RufflePlayer
       }).then(() => {
         const ruffleVer = window.RufflePlayer.sources.local.version
-        const ruffle = window.RufflePlayer.newest()
-        swfs.forEach(ele => {
-          const swfContainer = ele.querySelector('.swfContainer')
-          ele.querySelectorAll('.ruffleVer').forEach(el => {el.textContent = ' v' + ruffleVer})
-          swfContainer.classList.remove('cover-layer')
-          swfContainer.querySelectorAll('ruffle-player').forEach(el => {swfContainer.removeChild(el)})
-          //swfContainer.appendChild(ruffle.createPlayer())
-          this.loadSwf(ele, swfContainer.appendChild(ruffle.createPlayer()))
-        })
+        document.querySelectorAll('.ruffleVer').forEach(el => {el.textContent = ' v' + ruffleVer})
+        if (swfs.length > 0) {
+          const ruffle = window.RufflePlayer.newest()
+          swfs.forEach(ele => {
+            const swfContainer = ele.querySelector('.swfContainer')
+            swfContainer.classList.remove('cover-layer')
+            swfContainer.querySelectorAll('ruffle-player').forEach(el => {swfContainer.removeChild(el)})
+            //swfContainer.appendChild(ruffle.createPlayer())
+            this.loadSwf(ele, swfContainer.appendChild(ruffle.createPlayer()))
+          })
+        }
       })
     }
   }
