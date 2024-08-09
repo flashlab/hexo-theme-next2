@@ -139,19 +139,21 @@ hexo.extend.helper.register('gitalk_md5', function(path) {
  * Get page path given a certain language tag
  */
 hexo.extend.helper.register('i18n_path', function(language, page) {
-  const { path, lang } = page ?? this.page;
-  const base = path.startsWith(lang) ? path.slice(lang.length + 1) : path;
-  let newurl = this.languages.indexOf(language) === 0 ? '' : language + '/'
+  const { path, lang } = page ?? this.page
+  const oldUrl = path.replace(/^\//, '')
+  const base = oldUrl.startsWith(lang) ? oldUrl.slice(lang.length + 1) : oldUrl
+  let newUrl = this.languages.indexOf(language) === 0 ? '' : language + '/'
   // fallback to root page if page not exists 
   if (!page) {
-    const routerlist = hexo.route.list();
-    // console.dir(routerlist, {'maxArrayLength': null})
-    const fullurl = `${newurl}${base}${base.endsWith('/') ? 'index.html' : ''}`
-    if (routerlist.includes(fullurl)) newurl += base
+    const routerlist = hexo.route.list()
+    //console.dir(routerlist, {'maxArrayLength': null})
+    const fullurl = `${newUrl}${base}${base.endsWith('/') ? 'index.html' : ''}`
+    if (routerlist.includes(fullurl)) newUrl += base
   } else {
-    newurl += base
+    newUrl += base
   }
-  return this.url_for(newurl);
+ // console.log([oldUrl, base, newUrl, fullurl].join(' | '))
+  return this.url_for(newUrl)
 });
 
 /**
