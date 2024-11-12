@@ -68,6 +68,7 @@ hexo.extend.filter.register('marked:renderer', renderer => {
         let iconClass = 'fa fa-external-link-square';
         if (/wikipedia\.org/i.test(link.hostname)) iconClass = 'fab fa-wikipedia-w fa-2xs'
         if (/github\.com/i.test(link.hostname)) iconClass = 'fab fa-github'
+        if (/reddit\.com/i.test(link.hostname)) iconClass = 'fab fa-reddit'
         const exturlIcon = theme.config.exturl_icon ? `<sup class="${iconClass}"></sup>` : '';
   
         // Return encrypted URL with title.
