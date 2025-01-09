@@ -548,8 +548,11 @@ document.addEventListener('page:loaded', () => {
       const swfs = document.querySelectorAll('.swfWrapper')
       const swfe = document.querySelectorAll('embed[src$=".swf"]')
       if (swfs.length == 0 && swfe.length == 0) return
-      const metaJ = await NexT.utils.getFetch('https://api.cdnjs.com/libraries/ruffle-rs?fields=latest,version&search_fields=name')
-      NexT.utils.getScript(metaJ.latest ?? 'https://cdnjs.cloudflare.com/ajax/libs/ruffle-rs/0.1.0-nightly.2024.7.19/ruffle.js', {
+      const metaJ = await NexT.utils.getFetch('https://data.jsdelivr.com/v1/packages/npm/@ruffle-rs/ruffle/resolved')
+      //const metaJ = await NexT.utils.getFetch('https://api.cdnjs.com/libraries/ruffle-rs?fields=latest,version&search_fields=name')
+      NexT.utils.getScript(metaJ.version ? `https://cdn.jsdelivr.net/npm/@ruffle-rs/ruffle@${metaJ.version}/ruffle.min.js` : 
+                                           'https://cdnjs.cloudflare.com/ajax/libs/ruffle-rs/0.1.0-nightly.2024.9.13/ruffle.js',
+      {
         condition: window.RufflePlayer
       }).then(() => {
         const ruffleVer = window.RufflePlayer.sources.local.version
