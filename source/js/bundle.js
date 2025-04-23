@@ -570,5 +570,19 @@ document.addEventListener('page:loaded', () => {
       })
     }
   }
-  Flash.loadSwfPlayer()
+  Flash.loadSwfPlayer();
+
+  // livephotoskit
+  const livep = document.querySelector('.livePhotoContainer')
+  if (livep) {
+    if (!window.LivePhotosKit) {
+      NexT.utils.getScript('https://cdn.apple-livephotoskit.com/lpk/1/livephotoskit.js', {
+        condition: window.LivePhotosKit
+      }).then(() => {
+        document.querySelectorAll('.livePhotoContainer').forEach(el => {LivePhotosKit.Player(el);})
+      })
+    } else if (document.querySelector('.lpk-live-photo-renderer') == null) {
+      document.querySelectorAll('.livePhotoContainer').forEach(el => {LivePhotosKit.Player(el);})
+    }
+  }
 })

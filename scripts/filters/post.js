@@ -3,8 +3,9 @@
 'use strict';
 
 const { parse } = require('url');
-const { encodeURL, unescapeHTML } = require('hexo-util');
+const { unescapeHTML } = require('hexo-util');
 const { config, theme } = hexo;
+const { parseLink } = require('../events/lib/utils');
 const preRegex = /<pre><code.*?<\/code><\/pre>/igs
 const figRegex = /<figure\sclass=(.*?)>(.*?)<\/figure>/igs
 const isWrap = config.highlight.line_number || config.highlight.wrap
@@ -12,40 +13,8 @@ const isWrap = config.highlight.line_number || config.highlight.wrap
 hexo.extend.filter.register('marked:renderer', renderer => {
   const originalTblRender = renderer.table;
   renderer.image = (...args) => {
-    // ![alt](/filename.webp?size=widthxheight "title|inline")
-    // const href = args[0], title = args[1], alt = args[2];
-    if (!/^(#|\/\/|http(s)?:)/.test(args[0])) {
-      // skip postPath option
-      args[0] = config.pic_cdn_url + args[0]
-    }
-    let out = ''
-    const arrurl = args[0].split('?')
-    let isInline = false
-    if (arrurl.length > 1) {
-      try {
-        const param = new URLSearchParams(arrurl[1])
-        const matched = param?.get('size')?.match(/^(\d+)x(\d+)$/)
-        if (matched) {
-          out += ` width="${matched[1]}" height="${matched[2]}" style="aspect-ratio: ${matched[1]} / ${matched[2]};"`
-          param.delete('size')
-        }
-        const classname = decodeURI(param?.get('class') ?? '')
-        if (classname) {
-          out += ` class="${classname}"`
-          param.delete('class')
-          isInline = classname.split(' ').includes('inline')
-        }
-        args[0] = `${arrurl[0]}?${param.toString()}`
-      } catch  { }
-    }
-    if (args[1]) out += ` title="${args[1]}"` 
-    if (args[2]) out += ` alt="${args[2]}"`
-    if (config.marked.lazyload) out += ' loading="lazy"';
-    out = `<img ${theme.config.lazyload ? 'data-src' : 'src'}="${encodeURL(args[0])}"${out}>`
-    if (config.marked.figcaption && args[2] && !isInline) {
-      return `<figure>${out}<figcaption aria-hidden="true">${args[2]}</figcaption></figure>`
-    }
-    return out;
+    // ![alt](/filename.webp?size=widthxheight&class=inline "title")
+    return parseLink.bind(hexo)(args)
   };
   renderer.table = (...args) => {
     let content = originalTblRender.apply(renderer, args);
@@ -81,6 +50,52 @@ hexo.extend.filter.register('marked:renderer', renderer => {
     }
   }
 }, 99);
+
+hexo.extend.filter.register('marked:extensions', extensions => {
+  extensions.push({
+    name: 'livePhoto',
+    level: 'block',
+    start(src) {
+      return src.match(/!\[(.*?)\]/)?.index
+    },
+    tokenizer(src) {
+      const cap = /^!\[(.*?)\]\(([^)]*?(?:size\=(\d+)x(\d+))?)\)\(([^)]*?(?:stamp\=(\d+))?)\)/.exec(src);
+
+      if (cap !== null) {
+        return {
+          type: 'livePhoto',
+          raw: cap[0],
+          text: cap[0]?.trim(),
+          label: cap[1],
+          photoSrc: !cap[2]?.startsWith('http') ? config.pic_cdn_url + cap[2] : cap[2],
+          videoSrc: !cap[5]?.startsWith('http') ? config.pic_cdn_url + cap[5] : cap[5],
+          width: cap[3],
+          height: cap[4],
+          stamp: cap[6]
+        };
+      }
+
+      return undefined;
+    },
+    renderer(token) {
+      return `
+        <figure>
+          <div class='livePhotoContainer'
+              style='height: ${token.height ?? 600}px'
+              data-live-photo
+              data-effect-type='live'
+              data-playback-style='full'
+              data-proactively-loads-video='false'
+              data-photo-src='${token.photoSrc}'
+              data-video-src='${token.videoSrc}'
+              ${token.stamp ? "data-photo-time=" + token.stamp : ""}
+          ></div>
+          <figcaption>${token.label}</figcaption>
+        </figure>
+      `
+    }
+  });
+});
 
 hexo.extend.filter.register('after_post_render', data => {
   let suffix = ''

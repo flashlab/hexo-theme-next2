@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const { parse } = require('url');
 const nextFont = require('./font');
 const nextUrl = require('./next-url');
-const { getVendors } = require('../events/lib/utils');
+const { getVendors, parseLink } = require('../events/lib/utils');
 
 hexo.extend.helper.register('next_font', nextFont);
 hexo.extend.helper.register('next_url', nextUrl);
@@ -73,39 +73,16 @@ hexo.extend.helper.register('next_pre', function() {
 });
 
 hexo.extend.helper.register('post_gallery', function(photos) {
-  const genImg = (purl) => {
-    let out = ''
-    const arrurl = purl.split('?')
-    if (arrurl.length > 1) {
-      purl = arrurl[0]
-      try {
-        const size = new URLSearchParams(arrurl[1]).get('size')
-        const matched = size.match(/^(\d+)x(\d+)$/)
-        if (matched) {
-          out += ` width="${matched[1]}" height="${matched[2]}" style="aspect-ratio: ${matched[1]} / ${matched[2]};"`
-        }
-      } catch  { }
-    }
-    if (this.config.marked.lazyload) out += ' loading="lazy"'
-    return `<img src="${!/^(#|\/\/|http(s)?:)/.test(purl) && (this.config.pic_cdn_url ?? '')}${purl}"${out} itemprop="contentUrl">`
-  }
-  if (!photos || !photos.length) return '';
+  if (!Array.isArray(photos) || photos.length < 1) return '';
+  let out = '<div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">'
   if (photos.length == 1) {
-    return `
-    <div class="post-gallery">
-    ${genImg(this.url_for(photos[0]))}
-    </div>`
-  } else {
-    const content = photos.map(photo => {
-      return `
-      <div class="post-gallery-image">
-        ${genImg(this.url_for(photo))}
-      </div>`
-    }).join('');
-    return `<div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
-      ${content}
-      </div>`;
-  }
+    out += parseLink.bind(this)(photos[0].split(' ').map((p, i) => i == 0 ? this.url_for(p) : p))
+  } else photos.forEach(photo => {
+    let par = photo.split(' ')
+    par[0] = this.url_for(par[0])
+    out += `<div class="post-gallery-image">${parseLink.bind(this)(par)}</div>`
+  });
+  return out + '</div>'
 });
 
 hexo.extend.helper.register('post_banner', function(raw) {
