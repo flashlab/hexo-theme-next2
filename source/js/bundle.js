@@ -102,6 +102,8 @@ document.addEventListener('pjax:success', () => {
     document.querySelector('.sidebar-inner').classList.toggle('sidebar-nav-active', hasTOC);
     NexT.utils.activateSidebarPanel(hasTOC ? 0 : 1);
     NexT.utils.updateSidebarPosition();
+    // hide sidebar except on desktop view
+    if (window.innerWidth < 992 && !hasTOC) document.body.classList.remove('sidebar-active');
   }
 });
 

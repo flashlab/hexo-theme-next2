@@ -6,7 +6,9 @@
   <li class="menu-item menu-item-{{ node.name | lower | replace(' ', '-') }}">
 
     {%- set menuIcon = '<i class="fa">' + node.icon + '</i>' if theme.menu_settings.icons and node.icon else '' %}
-    {%- set menuIcon = '<i class="' + node.icon + ' fa-fw"></i>' if node.icon.indexOf('fa') == 0 %}
+    {%- if node.icon.indexOf('fa') === 0 %}
+      {%- set menuIcon = '<i class="' + node.icon + ' fa-fw"></i>' %}
+    {%- endif %}
 
     {%- set menuBadge = '' %}
     {%- if theme.menu_settings.badges %}

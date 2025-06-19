@@ -23,6 +23,12 @@ hexo.extend.filter.register('marked:renderer', renderer => {
   if (theme.config.exturl) {
     const siteHost = parse(config.url).hostname || config.url;
     const originalUrlRender = renderer.link;
+    const iconSup = new Map([['wikipedia\.org', 'fa-wikipedia-w fa-2xs'],
+                             ['github\.com', 'fa-github'],
+                             ['reddit\.com', 'fa-reddit'],
+                             ['weixin\.qq\.com', 'fa-weixin'],
+                             ['cloud\.189\.cn|pan\.baidu\.com', 'fa-google-drive'],
+                            ])
     renderer.link = (...args) => {
       let content = originalUrlRender.apply(renderer, args);
       return content.replace(/<a[^>]*\shref="([^"]+)"[^>]*>([^<]+)<\/a>/ig, (match, href, html) => {
@@ -35,9 +41,13 @@ hexo.extend.filter.register('marked:renderer', renderer => {
 
         // External URL icon
         let iconClass = 'fa fa-external-link-square';
-        if (/wikipedia\.org/i.test(link.hostname)) iconClass = 'fab fa-wikipedia-w fa-2xs'
-        if (/github\.com/i.test(link.hostname)) iconClass = 'fab fa-github'
-        if (/reddit\.com/i.test(link.hostname)) iconClass = 'fab fa-reddit'
+        for (const [reg, fax] of iconSup) {
+          const re = new RegExp(reg, 'i');
+          if (re.test(link.hostname)) {
+            iconClass = 'fab ' + fax;
+            break;
+          }
+        }
         const exturlIcon = theme.config.exturl_icon ? `<sup class="${iconClass}"></sup>` : '';
   
         // Return encrypted URL with title.
