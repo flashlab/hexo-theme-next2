@@ -2,6 +2,7 @@
   --body-bg-color: $body-bg-color;
   --content-bg-color: $content-bg-color;
   --card-bg-color: $card-bg-color;
+  --card-bg-transcolor: $card-bg-transcolor;
   --text-color: $text-color;
   --blockquote-color: $blockquote-color;
   --link-color: $link-color;
@@ -34,6 +35,7 @@ if (false and hexo-config('darkmode')) {
       --body-bg-color: $body-bg-color-dark;
       --content-bg-color: $content-bg-color-dark;
       --card-bg-color: $card-bg-color-dark;
+      --card-bg-transcolor: $card-bg-transcolor-dark;
       --text-color: $text-color-dark;
       --blockquote-color: $blockquote-color-dark;
       --link-color: $link-color-dark;
@@ -73,3 +75,71 @@ if (false and hexo-config('darkmode')) {
     }
   }
 }
+
+.darkmode
+  --body-bg-color: $body-bg-color-dark;
+  --content-bg-color: $content-bg-color-dark;
+  --card-bg-color: $card-bg-color-dark;
+  --card-bg-transcolor: $card-bg-transcolor-dark;
+  --text-color: $text-color-dark;
+  --blockquote-color: $blockquote-color-dark;
+  --link-color: $link-color-dark;
+  --link-hover-color: $link-hover-color-dark;
+  --brand-color: $brand-color-dark;
+  --brand-hover-color: $brand-hover-color-dark;
+  --table-row-odd-bg-color: $table-row-odd-bg-color-dark;
+  --table-row-hover-bg-color: $table-row-hover-bg-color-dark;
+  --menu-item-bg-color: $menu-item-bg-color-dark;
+  --theme-color: $theme-color-dark;
+
+  --btn-default-bg: $btn-default-bg-dark;
+  --btn-default-color: $btn-default-color-dark;
+  --btn-default-border-color: $btn-default-border-color-dark;
+  --btn-default-hover-bg: $btn-default-hover-bg-dark;
+  --btn-default-hover-color: $btn-default-hover-color-dark;
+  --btn-default-hover-border-color: $btn-default-hover-border-color-dark;
+
+  --highlight-background: $highlight-background-dark;
+  --highlight-foreground: $highlight-foreground-dark;
+  --highlight-gutter-background: $highlight-gutter-background-dark;
+  --highlight-gutter-foreground: $highlight-gutter-foreground-dark;
+
+  color-scheme: dark;
+  //@require hexo-config('highlight.dark.file') if (hexo-config('highlight.enable') && hexo-config('highlight.dark.file'));
+  //@require hexo-config('prism.dark') if (hexo-config('prism.enable') && hexo-config('prism.dark'));
+  .hljs-subst
+    color: #fff
+  .hljs-comment
+    color: #999
+  .hljs-attr,.hljs-doctag,.hljs-keyword,.hljs-meta .hljs-keyword,.hljs-section,.hljs-selector-tag
+    color: #88aece
+  .hljs-attribute
+    color: #c59bc1
+  .hljs-name,.hljs-number,.hljs-quote,.hljs-selector-id,.hljs-template-tag,.hljs-type
+    color: #f08d49
+  .hljs-selector-class
+    color: #88aece
+  .hljs-link,.hljs-regexp,.hljs-selector-attr,.hljs-string,.hljs-symbol,.hljs-template-variable,.hljs-variable
+    color: #b5bd68
+  .hljs-meta,.hljs-selector-pseudo
+    color: #88aece
+  .hljs-built_in,.hljs-literal,.hljs-title
+    color: #f08d49
+  .hljs-bullet,.hljs-code
+    color: #ccc
+  .hljs-meta .hljs-string
+    color: #b5bd68
+  .hljs-deletion
+    color: #de7176
+  .hljs-addition
+    color: #76c490
+  img
+    opacity: .75;
+    &:hover
+      opacity: .9;
+  iframe
+    color-scheme: light;
+  .search-popup .search-header
+    background: $grey-dim;
+  .cover-layer
+    filter: invert(.65);

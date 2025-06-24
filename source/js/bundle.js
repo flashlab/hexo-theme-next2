@@ -595,13 +595,14 @@ document.addEventListener('page:loaded', () => {
     const progress = icon.querySelector("circle:last-of-type");
     const video = livePhoto.querySelector("video");
     const image = livePhoto.querySelector("img");
-    const warning = livePhoto.querySelector(".warning");
+    const warning = livePhoto.querySelector(".msg");
     let within = false;
     let watcher = null;
     const start = async (e) => {
       e.stopPropagation();
       e.preventDefault();
       within = true;
+      warning.classList.remove("show");
       try {
         video.currentTime = 0;
         if (watcher) clearTimeout(watcher);
@@ -639,9 +640,9 @@ document.addEventListener('page:loaded', () => {
         //console.log(e);
         if (within && e instanceof DOMException) {
           if (["NotAllowedError", "AbortError"].includes(e.name)) {
-            warning.innerText = "浏览器禁止自动播放，请尝试点击";
+            warning.innerText = "自动播放被禁用，请点击";
           } else if (["NotSupportedError"].includes(e.name)) {
-            warning.innerText = "视频加载失败或浏览器不支持";
+            warning.innerText = "视频加载失败或不支持";
           } else {
             warning.innerText = `其它错误：${e}`;
           }
@@ -651,7 +652,6 @@ document.addEventListener('page:loaded', () => {
     };
     const leave = () => {
       livePhoto.classList.remove("zoom");
-      warning.classList.remove("show");
       // await play() 可能一直卡住不返回。
       // 在 pause 之前设置，如果  await play() 还没
       // 成功返回，就会进入异常处理。
@@ -660,7 +660,7 @@ document.addEventListener('page:loaded', () => {
     };
     icon.addEventListener("mouseenter", start);
     icon.addEventListener("mouseleave", leave);
-    image.addEventListener("touchstart", start);
+    image.addEventListener("contextmenu", start);
     image.addEventListener("touchend", leave);
     image.addEventListener("touchcancel", leave);
     video.addEventListener(

@@ -87,15 +87,14 @@ hexo.extend.filter.register('marked:extensions', extensions => {
         <video src="${token.videoSrc}" playsinline preload="none"></video>
         ${parseLink.bind(hexo)(token.imageSrc)}
         <div class="icon">
-          <svg width="20" height="20" data-value="0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg">
+          <svg width="1.2em" height="1.2em" data-value="0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 1.3v.01m-3.66.64v.01m7.32-.01v.01M5.12 3.8v.01m13.76-.01v.01M2.73 6.65v.01m18.54-.01v.01M1.46 10.14v.01m21.08-.01v.01m-21.07 3.7v.01m21.06 0v.01M2.74 17.34v.01m18.52 0v.01M5.12 20.19v.01m13.75-.01v.01M8.34 22.05v.01m7.31-.01v.01m-3.65.63v.01" />
             <circle cx="12" cy="12" r="7.25" stroke-width="1.5" />
             <path d="M10.47 14.06V9.94L14.05 12z" fill="currentColor" />
             <circle cx="-12" cy="12" r="10.69" stroke-dashoffset="67.167" stroke-dasharray="67.167" transform="rotate(-90)" stroke-width="2.1" />
           </svg>
-          <span>LIVE</span>
+          <span>LIVE</span><span class="msg"></span>
         </div>
-        <div class="warning" style="opacity: 0;">Err!</div>
       </div>
       `
     }
