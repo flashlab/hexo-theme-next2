@@ -461,6 +461,7 @@ window.typing = function typing(el, tl, str_length, index, text_pos, loop=false)
     contents += tl[row++] + '\r\n';
   }
   //document.forms[0].elements[0].value = contents + tl[index].substring(0,text_pos) + "_";
+  if (!el) return;
   el.value = contents + tl[index].substring(0, text_pos);
   if (text_pos++ == str_length) {
     text_pos = 0;
@@ -574,17 +575,101 @@ document.addEventListener('page:loaded', () => {
   }
   Flash.loadSwfPlayer();
 
-  // livephotoskit
+/*   // livephotoskit
   const livep = document.querySelector('.livePhotoContainer')
   if (livep) {
     if (!window.LivePhotosKit) {
       NexT.utils.getScript('https://cdn.apple-livephotoskit.com/lpk/1/livephotoskit.js', {
         condition: window.LivePhotosKit
       }).then(() => {
-        document.querySelectorAll('.livePhotoContainer').forEach(el => {LivePhotosKit.Player(el);})
+        document.querySelectorAll('.livePhotoContainer').forEach(el => {LivePhotosKit.createPlayer(el);})
       })
     } else if (document.querySelector('.lpk-live-photo-renderer') == null) {
-      document.querySelectorAll('.livePhotoContainer').forEach(el => {LivePhotosKit.Player(el);})
+      document.querySelectorAll('.livePhotoContainer').forEach(el => {LivePhotosKit.createPlayer(el);})
     }
-  }
+  } */
+ // customed livephoto
+
+  document.querySelectorAll(".livePhotoContainer").forEach((livePhoto) => {
+    const icon = livePhoto.querySelector(".icon");
+    const progress = icon.querySelector("circle:last-of-type");
+    const video = livePhoto.querySelector("video");
+    const image = livePhoto.querySelector("img");
+    const warning = livePhoto.querySelector(".warning");
+    let within = false;
+    let watcher = null;
+    const start = async (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      within = true;
+      try {
+        video.currentTime = 0;
+        if (watcher) clearTimeout(watcher);
+        (function loading(loaded) {
+          let nextLoaded = loaded;
+          if (video.buffered.length > 0) {
+            let totalBuffered = 0;
+            for (let step = 0; step < video.buffered.length; step++) {
+              totalBuffered +=
+                video.buffered.end(step) - video.buffered.start(step);
+            }
+            const duration = video.duration;
+            if (duration > 0 && totalBuffered > 0) {
+              nextLoaded = Math.min(
+                (totalBuffered / duration).toPrecision(2) * 100,
+                100
+              );
+            }
+          }
+          if (nextLoaded === 100 && loaded === undefined) return;
+          if (nextLoaded !== loaded && nextLoaded > 0) {
+            progress.style.strokeDashoffset =
+              67.167 * ((100 - nextLoaded) / 100); //2πr=67.167
+          }
+          if (nextLoaded === 100 && loaded === 100) {
+            progress.getBoundingClientRect();
+            progress.style.strokeDashoffset = "";
+          } else {
+            watcher = setTimeout(loading, 300, nextLoaded ?? 0);
+          }
+        })();
+        await video.play();
+        livePhoto.classList.add("zoom");
+      } catch (e) {
+        //console.log(e);
+        if (within && e instanceof DOMException) {
+          if (["NotAllowedError", "AbortError"].includes(e.name)) {
+            warning.innerText = "浏览器禁止自动播放，请尝试点击";
+          } else if (["NotSupportedError"].includes(e.name)) {
+            warning.innerText = "视频加载失败或浏览器不支持";
+          } else {
+            warning.innerText = `其它错误：${e}`;
+          }
+          warning.classList.add("show");
+        }
+      }
+    };
+    const leave = () => {
+      livePhoto.classList.remove("zoom");
+      warning.classList.remove("show");
+      // await play() 可能一直卡住不返回。
+      // 在 pause 之前设置，如果  await play() 还没
+      // 成功返回，就会进入异常处理。
+      within = false;
+      video.pause();
+    };
+    icon.addEventListener("mouseenter", start);
+    icon.addEventListener("mouseleave", leave);
+    image.addEventListener("touchstart", start);
+    image.addEventListener("touchend", leave);
+    image.addEventListener("touchcancel", leave);
+    video.addEventListener(
+      "loadedmetadata",
+      () => (progress.style.strokeDashoffset = 53.7336)
+    );
+    video.addEventListener("ended", () => {
+      livePhoto.classList.remove("zoom");
+    });
+  });
+
 })

@@ -81,7 +81,7 @@ function parseLink(args) {
 
       const matched = param?.get('size')?.match(/^(\d+)x(\d+)$/)
       if (matched) {
-        out += ` width="${matched[1]}" height="${matched[2]}" style="aspect-ratio: ${matched[1]} / ${matched[2]};"`
+        out += ` height="${matched[2]}" style="aspect-ratio: ${matched[1]} / ${matched[2]};"` //  remove width="${matched[1]}" to enable max-height
         param.delete('size')
       }
 

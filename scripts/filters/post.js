@@ -69,6 +69,38 @@ hexo.extend.filter.register('marked:extensions', extensions => {
       return src.match(/!\[(.*?)\]/)?.index
     },
     tokenizer(src) {
+      const cap = /^!\[([^\]]*?)\]\(([^)\s]+?(?:size\=(\d+)x(\d+))?)(?:\s([^)]*?))?\)\(([^)]*?)\)/.exec(src);
+      if (cap !== null) {
+        return {
+          type: 'livePhoto',
+          raw: cap[0],
+          imageSrc: [cap[2], cap[5], cap[1]],
+          videoSrc: cap[6]?.startsWith('/') ? config.pic_cdn_url + cap[6] : cap[6],
+          ratio: cap[3] + ' / ' + cap[4],
+        };
+      }
+      return undefined;
+    },
+    renderer(token) {
+      return `
+      <div class="livePhotoContainer" style="aspect-ratio: ${token.ratio}">
+        <video src="${token.videoSrc}" playsinline preload="none"></video>
+        ${parseLink.bind(hexo)(token.imageSrc)}
+        <div class="icon">
+          <svg width="20" height="20" data-value="0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 1.3v.01m-3.66.64v.01m7.32-.01v.01M5.12 3.8v.01m13.76-.01v.01M2.73 6.65v.01m18.54-.01v.01M1.46 10.14v.01m21.08-.01v.01m-21.07 3.7v.01m21.06 0v.01M2.74 17.34v.01m18.52 0v.01M5.12 20.19v.01m13.75-.01v.01M8.34 22.05v.01m7.31-.01v.01m-3.65.63v.01" />
+            <circle cx="12" cy="12" r="7.25" stroke-width="1.5" />
+            <path d="M10.47 14.06V9.94L14.05 12z" fill="currentColor" />
+            <circle cx="-12" cy="12" r="10.69" stroke-dashoffset="67.167" stroke-dasharray="67.167" transform="rotate(-90)" stroke-width="2.1" />
+          </svg>
+          <span>LIVE</span>
+        </div>
+        <div class="warning" style="opacity: 0;">Err!</div>
+      </div>
+      `
+    }
+    /*  // for livephotosKit JS
+    tokenizer(src) {
       const cap = /^!\[(.*?)\]\(([^)]*?(?:size\=(\d+)x(\d+))?)\)\(([^)]*?(?:stamp\=(\d+))?)\)/.exec(src);
 
       if (cap !== null) {
@@ -102,8 +134,8 @@ hexo.extend.filter.register('marked:extensions', extensions => {
           ></div>
           <figcaption>${token.label}</figcaption>
         </figure>
-      `
-    }
+      ` 
+    }*/
   });
 });
 
