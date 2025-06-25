@@ -127,7 +127,7 @@ module.exports = ctx => function(args, content) {
 
   content = ctx.render.renderSync({ text: content, engine: 'markdown' });
 
-  const pictures = content.match(/(<a[^>]*>((?!<\/a)(.|\n))+<\/a>)|(<img[^>]+>)|(<figure>((?!<\/figure)(.|\n))+<\/figure>)/g);
+  const pictures = content.match(/(<figure((?!<\/figure)(.|\n))+<\/figure>)|(<a[^>]*>((?!<\/a)(.|\n))+<\/a>)|(<img[^>]+>)/g);
 
   return `<div class="group-picture">${templates.dispatch(pictures, group, layout)}</div>`;
 };

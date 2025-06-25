@@ -83,7 +83,7 @@ hexo.extend.filter.register('marked:extensions', extensions => {
     },
     renderer(token) {
       return `
-      <div class="livePhotoContainer" style="aspect-ratio: ${token.ratio}">
+      <figure class="livePhotoContainer" style="aspect-ratio: ${token.ratio}">
         <video src="${token.videoSrc}" playsinline preload="none"></video>
         ${parseLink.bind(hexo)(token.imageSrc)}
         <div class="icon">
@@ -93,9 +93,9 @@ hexo.extend.filter.register('marked:extensions', extensions => {
             <path d="M10.47 14.06V9.94L14.05 12z" fill="currentColor" />
             <circle cx="-12" cy="12" r="10.69" stroke-dashoffset="67.167" stroke-dasharray="67.167" transform="rotate(-90)" stroke-width="2.1" />
           </svg>
-          <span>LIVE</span><span class="msg"></span>
+          <span>LIVE</span><span class="warning animated fadeInRight"></span>
         </div>
-      </div>
+      </figure>
       `
     }
     /*  // for livephotosKit JS

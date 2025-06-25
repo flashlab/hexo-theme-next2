@@ -595,7 +595,7 @@ document.addEventListener('page:loaded', () => {
     const progress = icon.querySelector("circle:last-of-type");
     const video = livePhoto.querySelector("video");
     const image = livePhoto.querySelector("img");
-    const warning = livePhoto.querySelector(".msg");
+    const warning = livePhoto.querySelector(".warning");
     let within = false;
     let watcher = null;
     const start = async (e) => {

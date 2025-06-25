@@ -19,6 +19,7 @@
     width: 100%;
     height: 100%;
     z-index -99;
+    border-style: none;
     transition: transform .5s ease;
     // 如果被外界容器强制限制了比例，可能出现拉升，修复它。
     // 正常情况下，有 aspect-ratio，将不影响。
@@ -36,7 +37,8 @@
 
   &.zoom {
     img, video {
-      transform: scale(1.1);
+      // fix shaking https://stackoverflow.com/a/50082855
+      transform: scale(1.05) rotate(0.02deg);
     }
     img {
       opacity: 0;
@@ -45,13 +47,13 @@
 
   .icon {
     display: inline-flex;
-    align-items: center;
-    padding: 2px;
+    align-items: end;
     border-radius: $note-border-radius;
     position: absolute;
     left: 10px;
     top: 10px;
-    height: 22px;
+    padding: 2px;
+    gap: 2px;
     background-color: var(--card-bg-transcolor);
     cursor: pointer;
     user-select: none;
@@ -64,19 +66,17 @@
       }
     }
     span {
-      padding: 0 3px;
       line-height: 1;
     }
-    .msg {
-      background: orange;
+    .warning {
+      background: $note-modern-bg.warning;
       font-size: .8em;
       padding: 3px 3px 1px 3px;
       border-radius: 7px;
-      color: white;
-      transition: opacity .5s linear;
-      opacity: 0;
+      color: $note-modern-text.warning;
+      display: none;
       &.show {
-        opacity: 1 !important;
+        display: inline-block;
       }
     }
   }
