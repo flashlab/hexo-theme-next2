@@ -21,6 +21,10 @@
   {{ next_vendors('fancybox_css') }}
 {%- endif %}
 
+{%- if page.noindex %}
+<meta name="robots" content="noindex">
+{%- endif %}
+
 {# if is_post() #}
 {# <meta name="description" content="{{ truncate(page.content | striptags, {length: 150}) }}"> #}
 {# endif #}
