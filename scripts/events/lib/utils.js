@@ -63,45 +63,49 @@ function getVendors({ name, alias, version, file, minified, local, custom }) {
     custom  : (custom || '').replace(/\$\{(.+?)\}/g, (match, $1) => value[$1])
   };
 }
-
+/**
+ * Parse markdown image like ![alt](/filename.webp?size=widthxheight&class=inline "title")
+ * @param {args} args.href: url, args.title: title, args.text: alt/figcaption, args.nocap: hidecaption
+ * @returns html string
+ */
 function parseLink(args) {
   let out = ''
-  let isInline = false
-
+  let classname = []
   const { config, theme } = this;
 
-  if (!/^(#|\/\/|http(s)?:)/.test(args[0])) {
-      args[0] = (config.pic_cdn_url ?? '') + args[0]
-  }
-
-  const arrurl = args[0].split('?')
+  args.href = decodeURI(args.href.trim());
+  if (!/^(#|\/\/|http(s)?:)/.test(args.href)) args.href = (config.pic_cdn_url ?? '') + args.href
+  // emoji
+  if (args.href.includes('/emoji/')) classname.push('inline')
+  const arrurl = args.href.split('?')
   if (arrurl.length > 1) {
     try {
       const param = new URLSearchParams(arrurl[1])
-
       const matched = param?.get('size')?.match(/^(\d+)x(\d+)$/)
       if (matched) {
         out += ` height="${matched[2]}" style="aspect-ratio: ${matched[1]} / ${matched[2]};"` //  remove width="${matched[1]}" to enable max-height
         param.delete('size')
       }
 
-      const classname = decodeURI(param?.get('class') ?? '')
-      if (classname) {
-        out += ` class="${classname}"`
-        isInline = classname.split(' ').includes('inline')
+      let clas = param?.get('class') || ''
+      if (clas) {
+        classname = [...new Set([...clas.split(' ').filter(c => c.trim() !== ''), ...classname])]
         param.delete('class')
       }
-      args[0] = arrurl[0] + (param.size > 0 ? `?${param.toString()}` : '')
+      args.href = arrurl[0] + (param.size > 0 ? `?${param.toString()}` : '')
     } catch  { }
   }
+  // hide caption if is inline.
+  if (classname.includes('inline')) args.nocap = true
+  if (classname.length > 0) out += ` class="${classname.join(' ')}"`
 
-  if (args[1]) out += ` title="${args[1]}"` 
-  if (args[2]) out += ` alt="${args[2]}"`
+  if (args.title) out += ` title="${args.title}"` 
+  if (args.text) out += ` alt="${args.text}"`
   if (config.marked.lazyload) out += ' loading="lazy"';
 
-  out = `<img ${theme.lazyload ? 'data-src' : 'src'}="${encodeURL(args[0])}"${out}>`
-  if (config.marked.figcaption && args[2] && !isInline) {
-    return `<figure>${out}<figcaption aria-hidden="true">${args[2]}</figcaption></figure>`
+  out = `<img ${theme.lazyload ? 'data-src' : 'src'}="${encodeURL(args.href)}"${out}>`
+  if (config.marked.figcaption && args.text && !args.nocap) {
+    return `<figure>${out}<figcaption aria-hidden="true">${args.text}</figcaption></figure>`
   }
   return out;
 }

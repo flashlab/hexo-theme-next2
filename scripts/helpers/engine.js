@@ -74,15 +74,16 @@ hexo.extend.helper.register('next_pre', function() {
 
 hexo.extend.helper.register('post_gallery', function(photos) {
   if (!Array.isArray(photos) || photos.length < 1) return '';
-  let out = '<div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">'
-  if (photos.length == 1) {
-    out += parseLink.bind(this)(photos[0].split(' ').map((p, i) => i == 0 ? this.url_for(p) : p))
-  } else photos.forEach(photo => {
-    let par = photo.split(' ')
-    par[0] = this.url_for(par[0])
-    out += `<div class="post-gallery-image">${parseLink.bind(this)(par)}</div>`
-  });
-  return out + '</div>'
+  return photos.reduce((acc, photo) => {
+    let arr = photo.split(' ').slice(0, 3);
+    const par = {}
+    par.href = this.url_for(arr[0])
+    par.title = arr[1] || null;
+    par.text = arr[2] || null;
+    par.nocap = true;
+    const content = parseLink.bind(this)(par);
+    return acc + (photos.length == 1 ? content : `<div class="post-gallery-image">${content}</div>`);
+  }, '<div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">') + '</div>';
 });
 
 hexo.extend.helper.register('post_banner', function(raw) {

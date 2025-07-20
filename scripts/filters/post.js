@@ -3,34 +3,27 @@
 'use strict';
 
 const { parse } = require('url');
+const { Renderer } = require('marked');
 const { unescapeHTML } = require('hexo-util');
 const { config, theme } = hexo;
 const { parseLink } = require('../events/lib/utils');
 const preRegex = /<pre><code.*?<\/code><\/pre>/igs
 const figRegex = /<figure\sclass=(.*?)>(.*?)<\/figure>/igs
 const isWrap = config.highlight.line_number || config.highlight.wrap
+const defaultRenderer = new Renderer();
 
 hexo.extend.filter.register('marked:renderer', renderer => {
-  const originalTblRender = renderer.table;
-  renderer.image = (...args) => {
-    // ![alt](/filename.webp?size=widthxheight&class=inline "title")
-    return parseLink.bind(hexo)(args)
-  };
-  renderer.table = (...args) => {
-    let content = originalTblRender.apply(renderer, args);
+  renderer.image = ({href, title, text}) => {
+    return parseLink.bind(hexo)({href, title, text})
+  }; 
+  renderer.table = function(...args) {
+    let content = defaultRenderer.table.apply(this, args);
     return `<div class="table-container">${content}</div>`
   };
   if (theme.config.exturl) {
     const siteHost = parse(config.url).hostname || config.url;
-    const originalUrlRender = renderer.link;
-    const iconSup = new Map([['wikipedia\.org', 'fa-wikipedia-w fa-2xs'],
-                             ['github\.com', 'fa-github'],
-                             ['reddit\.com', 'fa-reddit'],
-                             ['weixin\.qq\.com', 'fa-weixin'],
-                             ['cloud\.189\.cn|pan\.baidu\.com', 'fa-google-drive'],
-                            ])
-    renderer.link = (...args) => {
-      let content = originalUrlRender.apply(renderer, args);
+    renderer.link = function(...args) {
+      let content = defaultRenderer.link.apply(this, args);
       return content.replace(/<a[^>]*\shref="([^"]+)"[^>]*>([^<]+)<\/a>/ig, (match, href, html) => {
         // Exit if the href attribute doesn't exist.
         if (!href) return match;
@@ -41,10 +34,10 @@ hexo.extend.filter.register('marked:renderer', renderer => {
 
         // External URL icon
         let iconClass = 'fa fa-external-link-square';
-        for (const [reg, fax] of iconSup) {
-          const re = new RegExp(reg, 'i');
+        for (const item of theme.config.exturl_icon.custom) {
+          const re = new RegExp(item.pattern, 'i');
           if (re.test(link.hostname)) {
-            iconClass = 'fab ' + fax;
+            iconClass = item.classname;
             break;
           }
         }
@@ -74,7 +67,7 @@ hexo.extend.filter.register('marked:extensions', extensions => {
         return {
           type: 'livePhoto',
           raw: cap[0],
-          imageSrc: [cap[2], cap[5], cap[1]],
+          imageSrc: {href: cap[2], title: cap[5], text: cap[1], nocap: true},
           videoSrc: cap[6]?.startsWith('/') ? config.pic_cdn_url + cap[6] : cap[6],
           ratio: cap[3] + ' / ' + cap[4],
         };
