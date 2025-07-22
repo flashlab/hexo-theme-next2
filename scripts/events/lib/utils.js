@@ -64,19 +64,20 @@ function getVendors({ name, alias, version, file, minified, local, custom }) {
   };
 }
 /**
- * Parse markdown image like ![alt](/filename.webp?size=widthxheight&class=inline "title")
+ * Parse markdown image like ![alt](/filename.webp?size=widthxheight&class=emoji "title")
  * @param {args} args.href: url, args.title: title, args.text: alt/figcaption, args.nocap: hidecaption
  * @returns html string
  */
 function parseLink(args) {
   let out = ''
-  let classname = []
   const { config, theme } = this;
 
   args.href = decodeURI(args.href.trim());
   if (!/^(#|\/\/|http(s)?:)/.test(args.href)) args.href = (config.pic_cdn_url ?? '') + args.href
   // emoji
-  if (args.href.includes('/emoji/')) classname.push('inline')
+  if (args.href.includes('/emoji/') && !args.text.startsWith(':')) {
+    args.text = `:${args.href.split('/').pop().split('.')[0]}:`;
+  }
   const arrurl = args.href.split('?')
   if (arrurl.length > 1) {
     try {
@@ -87,17 +88,16 @@ function parseLink(args) {
         param.delete('size')
       }
 
-      let clas = param?.get('class') || ''
-      if (clas) {
-        classname = [...new Set([...clas.split(' ').filter(c => c.trim() !== ''), ...classname])]
+      const classname = param?.get('class') || ''
+      if (classname) {
+        out += ` class="${clas}"`
         param.delete('class')
       }
       args.href = arrurl[0] + (param.size > 0 ? `?${param.toString()}` : '')
     } catch  { }
   }
-  // hide caption if is inline.
-  if (classname.includes('inline')) args.nocap = true
-  if (classname.length > 0) out += ` class="${classname.join(' ')}"`
+  // hide caption if is start with by [:].
+  if (args.text.startsWith(':')) args.nocap = true
 
   if (args.title) out += ` title="${args.title}"` 
   if (args.text) out += ` alt="${args.text}"`

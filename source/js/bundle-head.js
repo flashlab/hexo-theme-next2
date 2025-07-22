@@ -666,7 +666,7 @@ NexT.boot.refresh = function () {
 
 NexT.boot.refreshx = function () {
   CONFIG.prism && window.Prism.highlightAll();
-  CONFIG.mediumzoom && window.mediumZoom('.post-body :not(a) > img:not(.inline)', {
+  CONFIG.mediumzoom && window.mediumZoom('.post-body :not(a) > img:not([alt$=":"])', {
     background: 'var(--content-bg-color)'
   }).on('open', event => {
     event.target.style.height="auto";
