@@ -84,7 +84,7 @@ function parseLink(args) {
       const param = new URLSearchParams(arrurl[1])
       const matched = param?.get('size')?.match(/^(\d+)x(\d+)$/)
       if (matched) {
-        out += ` height="${matched[2]}" style="aspect-ratio: ${matched[1]} / ${matched[2]};"` //  remove width="${matched[1]}" to enable max-height
+        out += ` decoding="async" crossorigin="anonymous" width="${matched[1]}" style="aspect-ratio: ${matched[1]} / ${matched[2]};"` //  remove width="${matched[1]}" to enable max-height
         param.delete('size')
       }
 

@@ -15,6 +15,10 @@ hexo.extend.filter.register('theme_inject', injects => {
     <a class="btn" href="javascript:;" title="Disqus"><i class="fa fa-comment-dots fa-fw fa-lg"></i>{{ __('reward.show_disqus') }}</a>{%- if page.lang == 'zh-CN' %}<sub> (非国内网络)</sub>{%- endif %}
   </div>
   <div id="disqus_thread"></div>
+  <style type="text/css">
+    .twikoo .el-button.is-disabled {color: #fff; background-color: #222; pointer-events: none; opacity: 0.5;}
+    .tk-icon.__comments, .tk-action-icon, .tk-action-link {color: #222}
+  </style>
   <div class="comments twikoo-container">
     <img src="/attach/dinosaur-{{ page.lang }}.png" alt="loading comments...:" loading="lazy" width="120" height="120"><br>
   </div>

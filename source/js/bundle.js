@@ -135,7 +135,7 @@ document.addEventListener('page:loaded', () => {
   //   }));
 
   NexT.utils.loadComments(CONFIG.twikoo.el)
-    .then(() => NexT.utils.getScript(CONFIG.twikoo.jsUrl || 'https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js', { condition: window.twikoo }))
+    .then(() => NexT.utils.getScript(CONFIG.twikoo.jsUrl || 'https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.min.js', { condition: window.twikoo }))
     .then(() => {twikoo.init(CONFIG.twikoo)});
 });
 
