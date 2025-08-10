@@ -76,11 +76,12 @@ hexo.extend.helper.register('post_gallery', function(photos) {
   if (!Array.isArray(photos) || photos.length < 1) return '';
   return photos.reduce((acc, photo) => {
     let arr = photo.split(' ').slice(0, 3);
-    const par = {}
-    par.href = this.url_for(arr[0])
-    par.title = arr[1] || null;
-    par.text = arr[2] || null;
-    par.nocap = true;
+    const par = {
+      href: this.url_for(arr[0]),
+      title: arr[1] || null,
+      text: arr[2] || null,
+      nocap: true
+    };
     const content = parseLink.bind(this)(par);
     return acc + (photos.length == 1 ? content : `<div class="post-gallery-image">${content}</div>`);
   }, '<div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">') + '</div>';

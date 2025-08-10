@@ -65,7 +65,10 @@ function getVendors({ name, alias, version, file, minified, local, custom }) {
 }
 /**
  * Parse markdown image like ![alt](/filename.webp?size=widthxheight&class=emoji "title")
- * @param {args} args.href: url, args.title: title, args.text: alt/figcaption, args.nocap: hidecaption
+ * @param {args.href} : url
+ * @param {args.title} : title
+ * @param {args.text} : alt/figcaption, if start with `:` will hide caption
+ * @param {args.nocap} : force hide caption
  * @returns html string
  */
 function parseLink(args) {
@@ -74,8 +77,8 @@ function parseLink(args) {
 
   args.href = decodeURI(args.href.trim());
   if (!/^(#|\/\/|http(s)?:)/.test(args.href)) args.href = (config.pic_cdn_url ?? '') + args.href
-  // emoji
-  if (args.href.includes('/emoji/') && !args.text.startsWith(':')) {
+  // patch old post with emoji
+  if (args.href.includes('/emoji/') && !args.text?.startsWith(':')) {
     args.text = `:${args.href.split('/').pop().split('.')[0]}:`;
   }
   const arrurl = args.href.split('?')
@@ -97,7 +100,7 @@ function parseLink(args) {
     } catch  { }
   }
   // hide caption if is start with by [:].
-  if (args.text.startsWith(':')) args.nocap = true
+  if (args.text?.startsWith(':')) args.nocap = true
 
   if (args.title) out += ` title="${args.title}"` 
   if (args.text) out += ` alt="${args.text}"`

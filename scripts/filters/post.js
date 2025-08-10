@@ -13,8 +13,8 @@ const isWrap = config.highlight.line_number || config.highlight.wrap
 const defaultRenderer = new Renderer();
 
 hexo.extend.filter.register('marked:renderer', renderer => {
-  renderer.image = ({href, title, text}) => {
-    return parseLink.bind(hexo)({href, title, text})
+  renderer.image = (args) => {
+    return parseLink.bind(hexo)(args);
   }; 
   renderer.table = function(...args) {
     let content = defaultRenderer.table.apply(this, args);
@@ -41,8 +41,15 @@ hexo.extend.filter.register('marked:renderer', renderer => {
             break;
           }
         }
-        const exturlIcon = theme.config.exturl_icon ? `<sup class="${iconClass}"></sup>` : '';
-  
+        let exturlIcon = '';
+        if (theme.config.exturl_icon) {
+          exturlIcon = `<i class="${iconClass}"></i>`;
+          // svg icon
+          if (iconClass.endsWith('.svg')) {
+            exturlIcon = `<img alt=":${iconClass.slice(0, -4)}:" src="${config.pic_cdn_url}/emoji/svg/${iconClass}" />`;
+          }
+        }
+
         // Return encrypted URL with title.
         const title = match.match(/title="([^"]+)"/);
         const encoded = Buffer.from(unescapeHTML(href)).toString('base64');
@@ -59,7 +66,7 @@ hexo.extend.filter.register('marked:extensions', extensions => {
     name: 'livePhoto',
     level: 'block',
     start(src) {
-      return src.match(/!\[(.*?)\]/)?.index
+      return src.match(/!\[(.*?)\]\([^)]+\)\([^)]+\)/)?.index
     },
     tokenizer(src) {
       const cap = /^!\[([^\]]*?)\]\(([^)\s]+?(?:size\=(\d+)x(\d+))?)(?:\s([^)]*?))?\)\(([^)]*?)\)/.exec(src);
