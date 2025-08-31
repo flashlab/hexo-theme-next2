@@ -16,8 +16,8 @@ hexo.extend.filter.register('theme_inject', injects => {
   </div>
   <div id="disqus_thread"></div>
   <style type="text/css">
-    .twikoo .el-button.is-disabled {color: #fff; background-color: #222; pointer-events: none; opacity: 0.5;}
-    .tk-icon.__comments, .tk-action-icon, .tk-action-link {color: #222}
+    .twikoo .el-button.is-disabled {color: var(--btn-default-color); background-color: var(--btn-default-bg); pointer-events: none; opacity: 0.5;}
+    .tk-icon.__comments, .tk-action-icon, .tk-action-link {color: var(--text-color)}
   </style>
   <div class="comments twikoo-container">
     <img src="/attach/dinosaur-{{ page.lang }}.png" alt="loading comments...:" loading="lazy" width="120" height="120"><br>
