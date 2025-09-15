@@ -4,6 +4,7 @@
 
 const { parse } = require('url');
 const { Renderer } = require('marked');
+const markedFootnote = require('marked-footnote');
 const { unescapeHTML } = require('hexo-util');
 const { config, theme } = hexo;
 const { parseLink } = require('../events/lib/utils');
@@ -11,6 +12,10 @@ const preRegex = /<pre><code.*?<\/code><\/pre>/igs
 const figRegex = /<figure\sclass=(.*?)>(.*?)<\/figure>/igs
 const isWrap = config.highlight.line_number || config.highlight.wrap
 const defaultRenderer = new Renderer();
+
+hexo.extend.filter.register("marked:use", function (md) {
+    md(markedFootnote());
+});
 
 hexo.extend.filter.register('marked:renderer', renderer => {
   renderer.image = (args) => {
