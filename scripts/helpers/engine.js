@@ -99,10 +99,11 @@ hexo.extend.helper.register('post_edit', function(src) {
   return this.next_url(post_edit.url_edit + src, '<i class="fa fa-pen-nib"></i>', {
     class: 'post-edit-link',
     title: this.__('post.edit')
-  }) + this.next_url(post_edit.url_new, '<i class="fa fa-lightbulb"></i>', {
-    class: 'post-edit-link',
-    title: 'new'
-  });
+  })
+  //+ this.next_url(post_edit.url_new, '<i class="fa fa-lightbulb"></i>', {
+  //  class: 'post-edit-link',
+  //  title: 'new'
+  //});
 });
 
 hexo.extend.helper.register('post_count', function(year) {
