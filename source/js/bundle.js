@@ -546,7 +546,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // footer pen icon
   document.querySelector(".with-love").addEventListener("click", () => {
     const values =
-      "title: 我是标题\nauthor: Flora\ntags: [生活]\ncategories: [原创，喵的日记]\ndate: " +
+      "title: 我是标题\nauthor: Flora\ntags: [生活]\ncategories: [原创,喵的日记]\ndate: " +
       new Date()
         .toLocaleString("en-CA", {
           year: "numeric",
