@@ -1,21 +1,9 @@
 {{- next_data('page', next_config_unique()) }}
-{%- if theme.giscus.enable %}
-  {{ partial('_third-party/comments/giscus.njk', {}, {cache: theme.cache.enable}) }}
-{%- endif %}
-{%- if theme.twikoo.enable %}
-  {{ partial('_third-party/comments/twikoo.njk', {}, {cache: theme.cache.enable}) }}
-{%- endif %}
-{%- if not theme.bundle %}
-  {{- next_js('config.js') }}
-  {{ next_font() }}
-{%- endif %}
+{{- next_js('config.js') }}
+{{ next_font() }}
 <link rel="stylesheet" href="{{ url_for(theme.css) }}/main.css">
 
 {{ next_vendors('fontawesome', ' rel="preload" as="style" onload="this.onload=null;this.rel=\'stylesheet\'"') }}
-
-{%- if theme.motion.enable and not theme.bundle %}
-  {{ next_vendors('animate_css') }}
-{%- endif %}
 
 {%- if theme.fancybox %}
   {{ next_vendors('fancybox_css') }}
@@ -25,9 +13,6 @@
 <meta name="robots" content="noindex">
 {%- endif %}
 
-{# if is_post() #}
-{# <meta name="description" content="{{ truncate(page.content | striptags, {length: 150}) }}"> #}
-{# endif #}
 {%- if theme.open_graph.enable %}
   {%- if theme.open_graph.options %}
     {{ open_graph(theme.open_graph.options) }}
@@ -42,9 +27,6 @@
   {%- set canonical = canonical | replace(r/\.html$/, '') %}
 {%- endif %}
 <link rel="canonical" href="{{ canonical }}">
-
-{# Exports some front-matter variables to Front-End #}
-{# https://hexo.io/docs/variables.html #}
 
 {%- if theme.calendar.enable %}
 {{ next_data('calendar',

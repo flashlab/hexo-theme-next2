@@ -93,7 +93,7 @@ function parseLink(args) {
 
       const classname = param?.get('class') || ''
       if (classname) {
-        out += ` class="${clas}"`
+        out += ` class="${classname}"`
         param.delete('class')
       }
       args.href = arrurl[0] + (param.size > 0 ? `?${param.toString()}` : '')
