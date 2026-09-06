@@ -2,15 +2,19 @@
 
 'use strict';
 
-const { parse } = require('url');
-
 /**
  * Export theme config
  */
 hexo.extend.helper.register('next_config', function() {
   const { config, theme, url_for, __ } = this;
+  let hostname;
+  try {
+    hostname = new URL(config.url).hostname || config.url;
+  } catch {
+    hostname = config.url;
+  }
   const exportConfig = {
-    hostname  : parse(config.url).hostname || config.url,
+    hostname,
     root      : config.root,
     images    : url_for(theme.images),
     scheme    : theme.scheme,
@@ -18,9 +22,8 @@ hexo.extend.helper.register('next_config', function() {
     version   : this.next_version,
     exturl    : theme.exturl,
     sidebar   : theme.sidebar,
-    hljswrap  : theme.highlight.enable && (config.highlight.line_number || config.highlight.wrap),
-    copycode  : theme.codeblock.copy_button,
-    fold      : theme.codeblock.fold,
+    hljswrap  : theme.highlight.enable && config.highlight.wrap,
+    codeblock : theme.codeblock,
     bookmark  : theme.bookmark,
     mediumzoom: theme.mediumzoom,
     lazyload  : theme.lazyload,

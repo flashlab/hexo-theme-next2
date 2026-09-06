@@ -1,6 +1,6 @@
 ::selection {
-  background: $selection-bg;
-  color: $selection-color;
+  background: var(--selection-bg);
+  color: var(--selection-color);
 }
 
 html, body {
@@ -27,17 +27,17 @@ body {
   }
 
   if (hexo-config('body_scrollbar.stable')) {
+    // https://caniuse.com/mdn-css_properties_scrollbar-gutter
     scrollbar-gutter: stable;
   }
 }
 
-h1, h2, h3, h4, h5, h6
-  if $font-family-headings is defined
-    font-family: $font-family-headings;
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-family-headings;
   font-weight: bold;
   line-height: 1.5;
   margin: 30px 0 15px;
-  position: relative;
+}
 
 for $headline in (1 .. 6) {
   h{$headline} {
@@ -60,7 +60,7 @@ a {
   }
 }
 
-iframe, img, video, embed, svg {
+iframe, img, video, embed {
   display: block;
   margin-left: auto;
   margin-right: auto;

@@ -3,10 +3,13 @@
 .site-brand-container {
   display: flex;
   flex-shrink: 0;
-  padding: 0 10px;
 }
 
 .use-motion {
+  .column {
+    opacity: 0;
+  }
+  // fork: theme-toggle 按钮随 motion 淡入（配合上游 motion.js 的 pushToSequence）
   .site-brand-container .toggle {
     opacity: 0;
   }

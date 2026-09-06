@@ -33,16 +33,21 @@ const pjax = new Pjax({
 document.addEventListener("pjax:success", () => {
   pjax.executeScripts(document.querySelectorAll("script[data-pjax]"));
   NexT.boot.refresh();
-  NexT.boot.refreshx();
   // Define Motion Sequence & Bootstrap Motion.
   if (CONFIG.motion.enable) {
-    NexT.motion.integrator
-      .init()
-      .add(NexT.motion.middleWares.subMenu)
-      // Add sidebar-post-related transition.
-      .add(NexT.motion.middleWares.sidebar)
-      .add(NexT.motion.middleWares.postList)
-      .bootstrap();
+    try {
+      NexT.motion.integrator
+        .init()
+        .add(NexT.motion.middleWares.subMenu)
+        // Add sidebar-post-related transition.
+        .add(NexT.motion.middleWares.sidebar)
+        .add(NexT.motion.middleWares.postList)
+        .bootstrap();
+    } catch (error) {
+      console.warn('NexT Motion Error, fallback to static mode', error);
+      document.body.classList.remove('use-motion');
+      CONFIG.motion.enable = false;
+    }
   }
   if (CONFIG.sidebar.display !== "remove") {
     const hasTOC = document.querySelector(".post-toc:not(.placeholder-toc)");
@@ -56,3 +61,5 @@ document.addEventListener("pjax:success", () => {
       document.body.classList.remove("sidebar-active");
   }
 });
+
+if (!window.pjax) window.pjax = pjax;

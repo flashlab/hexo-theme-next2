@@ -52,6 +52,17 @@ desktop-largest() {
   }
 }
 
+light-dark-block() {
+  if (hexo-config('lightdark.check_supports')){
+    @supports (color: light-dark(red, red)) {
+      {block};
+    }
+  }
+  else {
+    {block};
+  }
+}
+
 sidebar() {
   if (($scheme == 'Muse') or ($scheme == 'Mist')) {
     {block}
@@ -71,24 +82,17 @@ word-wrap() {
 }
 
 disable-user-select() {
-  -moz-user-select: none;
-  -ms-user-select: none;
   -webkit-user-select: none;
   user-select: none;
 }
 
 sidebar-inline-links-item() {
-  margin: 5px 0 0;
-
-  a {
-    box-sizing: border-box;
-    display: inline-block;
-    max-width: 100%;
-    overflow: hidden;
-    padding: 0 5px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+  box-sizing: border-box;
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 flex-wrap() {
@@ -113,7 +117,7 @@ font-family-icons($icon = '') {
   if ($icon) {
     content: $icon;
   }
-  font-family: 'Font Awesome 6 Free';
+  font-family: 'Font Awesome 7 Free';
   font-weight: 900;
 }
 

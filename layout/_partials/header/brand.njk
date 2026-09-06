@@ -1,12 +1,8 @@
 <div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <a class="toggle" aria-label="{{ __('accessibility.nav_toggle') }}" role="button">
-      {%- if theme.menu %}
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-        <span class="toggle-line"></span>
-      {%- endif %}
-    </a>
+  <div class="site-nav-search popup-trigger" aria-label="{{ __('menu.search') }}" role="button">
+    {%- if theme.algolia_search.enable or theme.local_search.enable %}
+      <i class="fa fa-search fa-fw fa-lg"></i>
+    {%- endif %}
   </div>
 
   <div class="site-meta">
@@ -28,8 +24,14 @@
   </div>
 
   <div class="site-nav-right">
+    {# fork: 暗色切换按钮占位（暂不接线，机制改跟随系统后待重做） #}
     <a class="toggle theme-toggle" aria-label="{{ __('menu.darkmode') }}" role="button">
       <svg role="img" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
     </a>
+    <div class="site-nav-toggle" aria-label="{{ __('accessibility.nav_toggle') }}" role="button">
+      {%- if theme.menu %}
+        <i class="fa fa-ellipsis fa-fw fa-lg"></i>
+      {%- endif %}
+    </div>
   </div>
 </div>

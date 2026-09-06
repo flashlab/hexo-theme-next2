@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const { parse } = require('url');
 const nextFont = require('./font');
 const nextUrl = require('./next-url');
-const { getVendors, parseLink } = require('../events/lib/utils');
+const { getVendors } = require('../events/lib/utils');
 
 hexo.extend.helper.register('next_font', nextFont);
 hexo.extend.helper.register('next_url', nextUrl);
@@ -20,7 +20,8 @@ hexo.extend.helper.register('next_inject', function(point) {
 hexo.extend.helper.register('next_js', function(file, {
   pjax = false,
   module = false,
-  attr = ''
+  async = false,
+  defer = !async
 } = {}) {
   const { next_version } = this;
   const { internal, custom_cdn_url } = this.theme.vendors;
@@ -33,17 +34,21 @@ hexo.extend.helper.register('next_js', function(file, {
     custom  : custom_cdn_url
   });
   const src = links[internal] || links.local;
-  return `<script ${pjax ? 'data-pjax ' : ''}${module ? 'type="module" ' : ''}${attr ? ` ${attr} ` : ''}src="${src}" defer></script>`;
+  return `<script ${pjax ? 'data-pjax ' : ''}${module ? 'type="module" ' : ''}src="${src}"${defer ? ' defer' : ''}${async ? ' async' : ''}></script>`;
 });
 
-hexo.extend.helper.register('next_vendors', function(name, prop='') {
+hexo.extend.helper.register('next_vendors', function(name, {
+  async = false,
+  defer = !async
+} = {}) {
   const { url, integrity } = this.theme.vendors[name];
   const type = url.endsWith('css') ? 'css' : 'js';
-  if (integrity) prop += ` integrity="${integrity}" crossorigin="anonymous"`
   if (type === 'css') {
-    return `<link${prop.includes('rel=') ? '' : ' rel="stylesheet"'} href="${url}"${prop}>`;
+    if (integrity) return `<link rel="stylesheet" href="${url}" integrity="${integrity}" crossorigin="anonymous">`;
+    return `<link rel="stylesheet" href="${url}">`;
   }
-  return `<script src="${url}"${prop}></script>`;
+  if (integrity) return `<script src="${url}" integrity="${integrity}" crossorigin="anonymous"${defer ? ' defer' : ''}${async ? ' async' : ''}></script>`;
+  return `<script src="${url}"${defer ? ' defer' : ''}${async ? ' async' : ''}></script>`;
 });
 
 hexo.extend.helper.register('next_data', function(name, ...data) {
@@ -73,37 +78,23 @@ hexo.extend.helper.register('next_pre', function() {
 });
 
 hexo.extend.helper.register('post_gallery', function(photos) {
-  if (!Array.isArray(photos) || photos.length < 1) return '';
-  return photos.reduce((acc, photo) => {
-    let arr = photo.split(' ').slice(0, 3);
-    const par = {
-      href: this.url_for(arr[0]),
-      title: arr[1] || null,
-      text: arr[2] || null,
-      nocap: true
-    };
-    const content = parseLink.bind(this)(par);
-    return acc + (photos.length == 1 ? content : `<div class="post-gallery-image">${content}</div>`);
-  }, '<div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">') + '</div>';
-});
-
-hexo.extend.helper.register('post_banner', function(raw) {
-  const rawlink = /!\[[^\]]*\]\(([^\s\)]+)[\s\)]/.exec(raw);
-  if (rawlink === null) return '';
-  return [rawlink[1]]
+  if (!photos || !photos.length) return '';
+  const content = photos.map(photo => `
+    <div class="post-gallery-image">
+      <img src="${this.url_for(photo)}" itemprop="contentUrl">
+    </div>`).join('');
+  return `<div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+    ${content}
+    </div>`;
 });
 
 hexo.extend.helper.register('post_edit', function(src) {
   const { post_edit } = this.theme;
   if (!post_edit.enable) return '';
-  return this.next_url(post_edit.url_edit + src, '<i class="fa fa-pen-nib"></i>', {
+  return this.next_url(post_edit.url + src, '<i class="fa fa-pen-nib"></i>', {
     class: 'post-edit-link',
     title: this.__('post.edit')
-  })
-  //+ this.next_url(post_edit.url_new, '<i class="fa fa-lightbulb"></i>', {
-  //  class: 'post-edit-link',
-  //  title: 'new'
-  //});
+  });
 });
 
 hexo.extend.helper.register('post_count', function(year) {
@@ -118,22 +109,10 @@ hexo.extend.helper.register('gitalk_md5', function(path) {
 /**
  * Get page path given a certain language tag
  */
-hexo.extend.helper.register('i18n_path', function(language, page) {
-  const { path, lang } = page ?? this.page
-  const oldUrl = path.replace(/^\//, '')
-  const base = oldUrl.startsWith(lang) ? oldUrl.slice(lang.length + 1) : oldUrl
-  let newUrl = this.languages.indexOf(language) === 0 ? '' : language + '/'
-  // fallback to root page if page not exists 
-  if (!page) {
-    const routerlist = hexo.route.list()
-    //console.dir(routerlist, {'maxArrayLength': null})
-    const fullurl = `${newUrl}${base}${base.endsWith('/') ? 'index.html' : ''}`
-    if (routerlist.includes(fullurl)) newUrl += base
-  } else {
-    newUrl += base
-  }
- // console.log([oldUrl, base, newUrl, fullurl].join(' | '))
-  return this.url_for(newUrl)
+hexo.extend.helper.register('i18n_path', function(language) {
+  const { path, lang } = this.page;
+  const base = path.startsWith(lang) ? path.slice(lang.length + 1) : path;
+  return this.url_for(`${this.languages.indexOf(language) === 0 ? '' : '/' + language}/${base}`);
 });
 
 /**
