@@ -40,7 +40,11 @@ NexT.motion.integrator = {
             fill  : 'forwards'
           });
           animation.finished.then(() => {
-            Object.assign(target.style, item.styles);
+            // fork: 恒等 transform 改写为 none（内联 none 覆盖 CSS 的 scaleX(0) 初始态，
+            // 但不产生合成层，避免页面缩放时亚像素渲染导致 logo-line 粗细不一）
+            const styles = { ...item.styles };
+            if (styles.transform === 'scaleX(1)') styles.transform = 'none';
+            Object.assign(target.style, styles);
             animation.cancel();
           }).catch(() => {});
         });
@@ -85,7 +89,9 @@ NexT.motion.middleWares = {
         sequence.push({
           targets,
           complete: () => targets.classList.add('animated', menuItemTransition),
-          overlap : 200
+          // fork: overlap 200 与默认 duration 200 相抵会导致所有菜单项同时启动；
+          // 改为 100 恢复从左到右逐项下落（起始时间 0/100/200/...ms）
+          overlap : 100
         });
       });
     }

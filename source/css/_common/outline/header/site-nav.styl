@@ -1,21 +1,23 @@
-.site-nav-toggle, .site-nav-search {
-  color: var(--text-color);
+// fork: 恢复旧版移动端布局（左汉堡+右月亮，搜索/语言在菜单面板内）
+.site-nav-toggle {
   display: none;
-  padding: 0 10px;
-
-  .fa {
-    transition: transform .5s;
-  }
 }
 
 .site-nav-toggle, .site-nav-right {
   +mobile() {
     flex-column();
   }
-}
 
-.site-nav-on .site-nav-toggle .fa {
-  transform: rotate(-90deg);
+  .toggle {
+    color: var(--text-color);
+    padding: 10px;
+    width: 22px;
+
+    .toggle-line {
+      background: var(--text-color);
+      border-radius: 1px;
+    }
+  }
 }
 
 .site-nav {
