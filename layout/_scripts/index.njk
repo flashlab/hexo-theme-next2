@@ -1,8 +1,8 @@
 {%- include 'vendors.njk' -%}
-{%- if theme.bundle %}
-{{- next_js('bundle.js', { attr: 'defer' }) }}
-{%- else %}
-{{- next_js('comments.js') }}
+
+{%- if theme.injects.comment.length > 1 %}
+  {{- next_js('comments.js') }}
+{%- endif %}
 
 {{- next_js('utils.js') }}
 {%- if theme.motion.enable %}
@@ -19,5 +19,4 @@
 {%- endif %}
 {%- if theme.pjax %}
   {{- next_js('pjax.js') }}
-{%- endif %}
 {%- endif %}
