@@ -43,7 +43,9 @@
 {%- if theme.baidu_site_verification %}
   <meta name="baidu-site-verification" content="{{ theme.baidu_site_verification }}">
 {%- endif %}
+{%- if theme.vendors.plugins === 'cdnjs' %}
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin=""/>
+{%- endif %}
 {{- next_js('topbar.js', { async: true }) }}
 {%- if theme.pace.enable %}
   {%- if theme.pace.embed %}

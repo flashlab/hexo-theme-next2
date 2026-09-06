@@ -149,3 +149,14 @@
 document.addEventListener('pjax:send', () => {topbar.show()});
 document.addEventListener('pjax:complete', () => {topbar.hide()});
 if (document.readyState === 'loading') topbar.show()
+// 首访完成即隐藏(首载不走 pjax,无 pjax:complete)
+window.addEventListener('load', () => {topbar.hide()});
+// motion 保险丝:第三方 defer 脚本挂起时 DCL 不触发,.post-body 永久 visibility:hidden。
+// 3s 后 readyState 仍为 loading 即为此故障 → 摘掉 use-motion,内容无动画立现。
+// 之后 DCL 若再触发,WAAPI 动画从当前样式起播,无可见跳变。
+setTimeout(() => {
+  if (document.readyState === 'loading' && document.body) {
+    document.body.classList.remove('use-motion');
+    if (window.CONFIG && CONFIG.motion) CONFIG.motion.enable = false;
+  }
+}, 3000);
