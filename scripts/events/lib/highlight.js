@@ -12,7 +12,7 @@ function prismTheme(name) {
 module.exports = hexo => {
   const { config } = hexo;
   const theme = hexo.theme.config;
-  config.highlight.hljs = false;
+  //config.highlight.hljs = false;
   theme.highlight = {
     enable: config.syntax_highlighter === 'highlight.js' || config.highlight.enable,
     light : highlightTheme(theme.codeblock.theme.light),

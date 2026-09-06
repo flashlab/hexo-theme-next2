@@ -14,10 +14,6 @@
   +mobile() {
     display: block;
     margin-top: 10px;
-
-    &.menu-item-search {
-      display: none;
-    }
   }
 
   a {
@@ -32,11 +28,12 @@
   }
 
   i[class^='fa'] {
-    margin-right: 8px;
+    margin-right: 5px;
   }
-
-  .badge {
-    badge();
+  if (hexo-config('menu_settings.badges')) {
+    .badge {
+      @extend .item-badge;
+    }
   }
 }
 

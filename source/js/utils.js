@@ -1,4 +1,4 @@
-/* global NexT, CONFIG */
+/* global NexT, CONFIG, topbar */
 
 HTMLElement.prototype.wrap = function(wrapper) {
   this.parentNode.insertBefore(wrapper, this);
@@ -502,6 +502,19 @@ NexT.utils = {
       });
       intersectionObserver.observe(element);
     });
+  },
+
+  async getFetch(url) {
+    let res = {};
+    if (window.topbar) topbar.show();
+    try {
+      const response = await fetch(url);
+      if (response.ok) res = await response.json();
+    } catch ({ name, message }) {
+      console.error(name, message);
+    }
+    if (window.topbar) topbar.hide();
+    return res;
   },
 
   debounce(func, wait) {

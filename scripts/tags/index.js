@@ -7,10 +7,10 @@ const postButton = require('./button')(hexo);
 hexo.extend.tag.register('button', postButton);
 hexo.extend.tag.register('btn', postButton);
 
-const caniUse = require('./caniuse')(hexo);
+// const caniUse = require('./caniuse')(hexo);
 
-hexo.extend.tag.register('caniuse', caniUse);
-hexo.extend.tag.register('can', caniUse);
+// hexo.extend.tag.register('caniuse', caniUse);
+// hexo.extend.tag.register('can', caniUse);
 
 const centerQuote = require('./center-quote')(hexo);
 
@@ -41,18 +41,18 @@ hexo.extend.tag.register('wavedrom', wavedrom, true);
 
 const postNote = require('./note')(hexo);
 
-hexo.extend.tag.register('note', postNote, true);
-hexo.extend.tag.register('subnote', postNote, true);
+// hexo.extend.tag.register('note', postNote, true);
+// hexo.extend.tag.register('subnote', postNote, true);
 
 const pdf = require('./pdf')(hexo);
 
 hexo.extend.tag.register('pdf', pdf);
 
-const postTabs = require('./tabs')(hexo);
+// const postTabs = require('./tabs')(hexo);
 
-hexo.extend.tag.register('tabs', postTabs, true);
-hexo.extend.tag.register('subtabs', postTabs, true);
-hexo.extend.tag.register('subsubtabs', postTabs, true);
+// hexo.extend.tag.register('tabs', postTabs, true);
+// hexo.extend.tag.register('subtabs', postTabs, true);
+// hexo.extend.tag.register('subsubtabs', postTabs, true);
 
 const postVideo = require('./video');
 

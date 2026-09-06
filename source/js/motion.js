@@ -85,7 +85,9 @@ NexT.motion.middleWares = {
         sequence.push({
           targets,
           complete: () => targets.classList.add('animated', menuItemTransition),
-          overlap : 200
+          // fork: overlap 200 与默认 duration 200 相抵会导致所有菜单项同时启动；
+          // 改为 100 恢复从左到右逐项下落（起始时间 0/100/200/...ms）
+          overlap : 100
         });
       });
     }
@@ -118,7 +120,7 @@ NexT.motion.middleWares = {
       });
     }
 
-    document.querySelectorAll('.post-block').forEach(targets => {
+    document.querySelectorAll('.post-block:not(.no-motion)').forEach(targets => {
       sequence.push({
         targets,
         complete: () => targets.classList.add('animated', post_block),

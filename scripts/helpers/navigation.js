@@ -3,7 +3,7 @@
 'use strict';
 
 hexo.extend.helper.register('next_menu', function(path) {
-  path = ('/' + path).replace(/index\.html$/, '');
+  path = path.replace(/index\.html$/, '');
   const { menu_map } = this.theme;
   if (!menu_map.has(path)) return;
   let node = menu_map.get(path);

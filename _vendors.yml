@@ -3,10 +3,10 @@
 
 fontawesome:
   name: '@fortawesome/fontawesome-free'
-  version: 7.3.1
+  version: 6.5.2
   file: css/all.min.css
   alias: font-awesome
-  integrity: sha256-4Lad8m4ZWW1Lgb9+sMVLYEfnIh7BjV1NQMEe79Pviks=
+  integrity: sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=
 prism:
   name: prismjs
   version: 1.30.0

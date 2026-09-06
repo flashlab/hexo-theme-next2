@@ -1,14 +1,5 @@
 // Header Section
 // --------------------------------------------------
-.headband {
-  background: $headband-bg;
-  height: $headband-height;
-
-  +tablet-mobile() {
-    display: none;
-  }
-}
-
 .site-brand-container {
   display: flex;
   flex-shrink: 0;
@@ -16,6 +7,10 @@
 
 .use-motion {
   .column {
+    opacity: 0;
+  }
+  // fork: theme-toggle 按钮随 motion 淡入（配合上游 motion.js 的 pushToSequence）
+  .site-brand-container .toggle {
     opacity: 0;
   }
 }

@@ -33,9 +33,9 @@ hexo.extend.helper.register('next_config', function() {
     motion    : theme.motion,
     prism     : theme.prism.enable && !config.prismjs.preprocess,
     i18n      : {
-      placeholder: __('search.placeholder'),
-      empty      : __('search.empty', '${query}'),
-      hits_time  : __('search.hits_time', '${hits}', '${time}'),
+      //placeholder: __('search.placeholder'),
+      //empty      : __('search.empty', '${query}'),
+      //hits_time  : __('search.hits_time', '${hits}', '${time}'),
       hits       : __('search.hits', '${hits}')
     }
   };

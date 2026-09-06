@@ -3,6 +3,10 @@
     {{ _p('counter.categories', site.categories.length) }}
   </div>
   <div class="category-all">
+  {%- if is_default_lang() %}
     {{ list_categories() }}
+  {%- else %}
+    {{ list_categories() | replace('href="', 'href="/'+page.lang) }}
+  {%- endif %}
   </div>
 </div>

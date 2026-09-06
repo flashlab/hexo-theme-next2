@@ -1,5 +1,9 @@
 {% extends '_layout.njk' %}
-{% import '_macro/post-collapse.njk' as post_template with context %}
+{%- if page.tag === 'bigday' %}
+  {% import '_macro/mark-collapse.njk' as post_template with context %}
+{%- else %}
+  {% import '_macro/post-collapse.njk' as post_template with context %}
+{%- endif %}
 {% import '_macro/sidebar.njk' as sidebar_template with context %}
 
 {% block title %}{{ __('title.tag') }}: {{ page.tag }} | {{ title }}{% endblock %}

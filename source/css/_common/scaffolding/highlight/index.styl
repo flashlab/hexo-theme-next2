@@ -5,7 +5,7 @@ if (hexo-config('prism.enable')) {
   @require hexo-config('prism.number') if (hexo-config('prism.number'));
 }
 
-if (hexo-config('darkmode')) {
+if (false and hexo-config('darkmode')) {
   @media (prefers-color-scheme: dark) {
     @require hexo-config('highlight.dark.file') if (hexo-config('highlight.enable') && hexo-config('highlight.dark.file'));
     @require hexo-config('prism.dark') if (hexo-config('prism.enable') && hexo-config('prism.dark'));
@@ -16,12 +16,12 @@ if (hexo-config('darkmode')) {
 @require 'fold' if (hexo-config('codeblock.fold.enable'));
 
 // Placeholder: $code-inline $code-block
-$code-inline {
+$code-inline, code.hljs, .code-container {
   background: var(--highlight-background);
   color: var(--highlight-foreground);
 }
 
-$code-block {
+$code-block, .code-container {
   @extend $code-inline;
   line-height: $line-height-code-block;
   margin: 0 auto 20px;
@@ -52,9 +52,11 @@ pre, code {
 code {
   @extend $code-inline;
   border-radius: 3px;
-  font-size: $table-font-size;
+  // word-spacing: normal;
+  // font-size: $table-font-size;
   padding: 2px 4px;
   word-wrap();
+  word-break: break-all;
 }
 
 kbd {
@@ -72,7 +74,7 @@ kbd {
 figure.highlight {
   @extend $code-block;
   // Reduce DOM reflow with wrapTableWithBox
-  overflow: auto;
+  overflow: hidden;
   position: relative;
 
   color-scheme: light;
@@ -90,6 +92,8 @@ figure.highlight {
   }
 
   table {
+    display: block;
+    overflow: auto;
     border: 0;
     margin: 0;
     width: auto;

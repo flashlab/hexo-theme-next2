@@ -1,15 +1,19 @@
 <header class="post-header">
 
+{%- if page.headertitle !== false %}
 <h1 class="post-title" itemprop="name headline">
   {{- page.title }}
   {{- post_edit(page.source) }}
 </h1>
+{%- endif %}
 
 <div class="post-meta-container">
   {%- if page.description %}
     <div class="post-description">{{ page.description }}</div>
   {%- endif %}
-  {%- include '_partials/page/breadcrumb.njk' -%}
+  {%- if page.headercrumb !== false %}
+    {%- include '_partials/page/breadcrumb.njk' -%}
+  {%- endif %}
 </div>
 
 </header>

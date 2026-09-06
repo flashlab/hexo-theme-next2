@@ -43,8 +43,13 @@ NexT.boot.refresh = function() {
     // Register JS handlers by condition option.
     // Need to add config option in Front-End at 'scripts/helpers/next-config.js' file.
     CONFIG.prism && window.Prism.highlightAll();
-    CONFIG.mediumzoom && window.mediumZoom('.post-body :not(a) > img, .post-body > img', {
+    // fork: 排除 emoji 行内图（alt 以冒号结尾），并修复缩放时高度
+    CONFIG.mediumzoom && window.mediumZoom('.post-body :not(a) > img:not([alt$=":"]), .post-body > img:not([alt$=":"])', {
       background: 'var(--content-bg-color)'
+    }).on('open', event => {
+      event.target.style.height = 'auto';
+    }).on('opened', event => {
+      event.target.style.height = null;
     });
     CONFIG.lazyload && window.lozad('.post-body img').observe();
     if (CONFIG.pangu) {

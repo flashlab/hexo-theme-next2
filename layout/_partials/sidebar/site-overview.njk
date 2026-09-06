@@ -1,6 +1,6 @@
 <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
   {%- if theme.avatar.url %}
-    <img class="site-author-image" itemprop="image" alt="{{ author }}"
+    <img class="site-author-image" itemprop="image" alt="{{ author }}" loading="lazy"
       src="{{ url_for(theme.avatar.url) }}">
   {%- endif %}
   <p class="site-author-name" itemprop="name">{{ author }}</p>
@@ -13,7 +13,7 @@
     {%- if config.archive_dir != '/' and site.posts.length > 0 %}
       <div class="site-state-item site-state-posts">
         {%- set archive_dir = theme.menu.archives.split('||')[0] | trim if theme.menu.archives else config.archive_dir + '/' %}
-        <a href="{{ url_for(archive_dir) }}">
+        <a href="{{ i18n_path(page.lang, {lang: page.lang, path: archive_dir}) }}">
           <span class="site-state-item-count">{{ site.posts.length }}</span>
           <span class="site-state-item-name">{{ __('state.posts') }}</span>
         </a>
@@ -26,7 +26,7 @@
       <div class="site-state-item site-state-categories">
         {%- set category_dir = theme.menu.categories.split('||')[0] | trim if theme.menu.categories else config.category_dir + '/' %}
         {%- if hasCategoriesPage %}
-          <a href="{{ url_for(category_dir) }}">
+          <a href="{{ i18n_path(page.lang, {lang: page.lang, path: category_dir}) }}">
         {%- endif %}
         <span class="site-state-item-count">{{ site.categories.length }}</span>
         <span class="site-state-item-name">{{ __('state.categories') }}</span>
@@ -40,7 +40,7 @@
       <div class="site-state-item site-state-tags">
         {%- set tag_dir = theme.menu.tags.split('||')[0] | trim if theme.menu.tags else config.tag_dir + '/' %}
         {%- if hasTagsPage %}
-          <a href="{{ url_for(tag_dir) }}">
+          <a href="{{ i18n_path(page.lang, {lang: page.lang, path: tag_dir}) }}">
         {%- endif %}
         <span class="site-state-item-count">{{ site.tags.length }}</span>
         <span class="site-state-item-name">{{ __('state.tags') }}</span>
@@ -65,7 +65,11 @@
     {%- for name, link in theme.social %}
       <span class="links-of-author-item">
         {%- set sidebarURL = link.split('||')[0] | trim %}
-        {%- set sidebarIcon = '<i class="' + link.split('||')[1] | trim + ' fa-fw"></i>' if theme.social_icons.enable and link.split('||')[1] else '' %}
+        {%- set iconContent = link.split('||')[1] | trim %}
+        {%- set sidebarIcon = '<i class="fa">' + iconContent + '</i>' if theme.social_icons.enable and iconContent else '' %}
+        {%- if iconContent.indexOf('fa') === 0 %}
+          {%- set sidebarIcon = '<i class="' + iconContent + ' fa-fw"></i>' %}
+        {%- endif %}
         {%- set sidebarText = '' if (theme.social_icons.enable and theme.social_icons.icons_only) else name %}
         {{ next_url(sidebarURL, sidebarIcon + sidebarText, {title: name + ' → ' + sidebarURL, rel: 'noopener me'}) }}
       </span>
@@ -75,7 +79,7 @@
 
 {%- if theme.creative_commons.license and theme.creative_commons.sidebar %}
   <div class="cc-license animated" itemprop="license">
-    {%- set ccImage = '<img src="' + theme.vendors.creative_commons.url + '" alt="Creative Commons">' %}
+    {%- set ccImage = '<img src="' + theme.vendors.creative_commons.url + '" alt="Creative Commons" loading="lazy">' %}
     {{ next_url(ccURL, ccImage, {class: 'cc-opacity'}) }}
   </div>
 {%- endif %}

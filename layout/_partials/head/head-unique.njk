@@ -1,3 +1,17 @@
+{# Exports some front-matter variables to Front-End #}
+{# https://hexo.io/docs/variables.html #}
+{{ next_data('page', next_config_unique()) }}
+{{- next_js('config.js') }}
+{{ next_font() }}
+<link rel="stylesheet" href="{{ url_for(theme.css) }}/main.css">
+
+{# fontawesome 预加载（raw link，helper 无法表达 preload+onload） #}
+<link rel="preload" href="{{ theme.vendors.fontawesome.url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+{%- if theme.fancybox %}
+  {{ next_vendors('fancybox_css') }}
+{%- endif %}
+
 {%- if theme.open_graph.enable %}
   {%- if theme.open_graph.options %}
     {{ open_graph(theme.open_graph.options) }}
@@ -15,10 +29,9 @@
 {%- if page.noindex %}
 <meta name="robots" content="noindex">
 {%- endif %}
-{# Exports some front-matter variables to Front-End #}
-{# https://hexo.io/docs/variables.html #}
-{{ next_data('page', next_config_unique()) }}
 
+{%- if theme.calendar.enable %}
 {{ next_data('calendar',
   theme.calendar if page.type === 'schedule' else '')
 }}
+{%- endif %}

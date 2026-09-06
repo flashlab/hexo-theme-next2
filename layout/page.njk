@@ -15,21 +15,21 @@
   {%- endif %}
 {% endblock %}
 
-{% block class %}page posts-expand{% endblock %}
+{% block class %}page {% if page.collapse %}posts-collapse{% else %}posts-expand{% endif %}{% endblock %}
 
 {% block content %}
 
     {##################}
     {### PAGE BLOCK ###}
     {##################}
-    <div class="post-block" lang="{{ page.lang }}">
+    <div class="post-block{% if page.motion === false %} no-motion{% endif %}" lang="{{ page.lang }}">
       {%- if page.header !== false %}
         {%- include '_partials/page/page-header.njk' -%}
       {%- endif %}
       {#################}
       {### PAGE BODY ###}
       {#################}
-      <div class="post-body{% if page.direction and page.direction.toLowerCase() === 'rtl' %} rtl{% endif %}">
+      <div class="{% if page.collapse %}post-content{% else %}post-body{% endif %}{% if page.direction and page.direction.toLowerCase() === 'rtl' %} rtl{% endif %}">
         {%- if page.type === 'tags' %}
           {%- include '_partials/page/tags.njk' -%}
         {% elif page.type === 'categories' %}
@@ -44,7 +44,9 @@
       {### END PAGE BODY ###}
       {#####################}
     </div>
-    {%- include '_partials/page/breadcrumb.njk' -%}
+    {%- if page.headercrumb !== false %}
+      {%- include '_partials/page/breadcrumb.njk' -%}
+    {%- endif %}
     {######################}
     {### END PAGE BLOCK ###}
     {######################}

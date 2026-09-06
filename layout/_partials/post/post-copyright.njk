@@ -3,31 +3,60 @@
 
 <div class="post-copyright">
 <ul>
-  <li class="post-copyright-author">
-    {%- if page.author %}
-      <strong>{{ __('post.copyright.post_author') + __('symbol.colon') }} </strong>
-      {{- page.author }}
-    {%- elif author %}
-      <strong>{{ __('post.copyright.author') + __('symbol.colon') }} </strong>
-      {{- author }}
-    {%- endif %}
+  <li class="post-copyright-title">
+    {{ page.title }}
   </li>
   <li class="post-copyright-link">
-    {%- if page.post_link %}
-      <strong>{{ __('post.copyright.post_link') + __('symbol.colon') }}</strong>
-      {{ next_url(page.post_link, page.post_link, {title: page.title}) }}
-    {%- else %}
-      <strong>{{ __('post.copyright.link') + __('symbol.colon') }}</strong>
       {{ next_url(page.permalink, page.permalink, {title: page.title}, true) }}
+  </li>
+  <li class="post-copyright-meta">
+    <div>
+      {%- if page.author %}
+        <div>{{ __('post.copyright.post_author') }}</div>
+        <div>{{- page.author }}</div>
+      {%- elif author %}
+        <div>{{ __('post.copyright.author') }}</div>
+        <div>{{- author }}</div>
+      {%- endif %}
+    </div>
+    {%- if page.date %}
+      <div>
+        <div>{{ __('post.posted') }}</div>
+        <div>{{ date(page.date) }}</div>
+      </div>
     {%- endif %}
+    {%- if page.edited %}
+      <div>
+        <div>{{ __('post.edited') }}</div>
+        <div>{{ date(page.edited) }}</div>
+      </div>
+    {%- endif %}
+    {%- if page.post_link %}
+      <div>
+        <div>{{ __('post.copyright.post_link') }}</div>
+        <div>{{ next_url(page.post_link, page.post_link, {title: page.title}) }}</div>
+      </div>
+    {%- endif %}
+    <div>
+        <div>{{ __('post.copyright.title') }}</div>
+        <div>
+          {%- if page.author %}
+            {{- page.license if page.license else __('post.copyright.origin') }}
+          {%- elif post.cc_strict %}
+            {{- __('post.copyright.cc_strict') }}
+          {% else %}
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank">BY-NC-SA</a>
+          {%- endif %}
+        </div>
+      </div>
   </li>
   <li class="post-copyright-license">
-    {%- if page.copyright_reprint %}
-      <strong>{{ __('post.copyright.license_title') + __('symbol.colon') }} </strong>
-      {{- __('post.copyright.license_content_reprint', next_url(ccURL, ccIcon + ccText)) }}
+    {%- if page.author %}
+      {{- __('post.copyright.reprint') }}
+    {%- elif post.cc_strict %}
+      {{- __('post.copyright.author_cc_strict') }}
     {%- else %}
-      <strong>{{ __('post.copyright.license_title') + __('symbol.colon') }} </strong>
-      {{- __('post.copyright.license_content', next_url(ccURL, ccIcon + ccText)) }}
+      {{- __('post.copyright.content', next_url(ccURL, ccIcon + ccText)) }}
     {%- endif %}
   </li>
 </ul>
