@@ -5,7 +5,9 @@ const pjax = new Pjax({
   selectors: [
     "head title",
     'meta[property="og:title"]',
-    'script[type="application/json"]',
+    // 只交换恒在的 main/page 配置脚本；评论等按需配置脚本不参与（数量随页面变化会导致 switch fail）
+    'script[data-name="main"]',
+    'script[data-name="page"]',
     // Precede .main-inner to prevent placeholder TOC changes asap
     ".post-toc-wrap",
     ".main-inner",
